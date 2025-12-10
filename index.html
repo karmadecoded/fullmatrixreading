@@ -8,12 +8,14 @@
 * { margin:0; padding:0; box-sizing:border-box; }
 body {
     font-family:'Arial',sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: url('https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=1920&q=80') no-repeat center center fixed;
+    background-size: cover;
     min-height: 100vh;
     display:flex;
     justify-content:center;
     align-items:center;
     padding:20px;
+}
 }
 .container {
     background:white;
@@ -25,7 +27,7 @@ body {
 }
 h1 {
     text-align:center;
-    color:#667eea;
+    color:#caafe0;
     margin-bottom:30px;
     font-size:28px;
 }
@@ -33,7 +35,7 @@ h1 {
 label {
     display:block;
     margin-bottom:10px;
-    color:#333;
+    color:#ffffff;
     font-weight:bold;
 }
 input {
@@ -52,7 +54,7 @@ input::placeholder { color:#bbb; }
     font-size:18px;
     font-weight:bold;
     color:white;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #caafe0 0%, #350c48 100%);
     border:none;
     border-radius:10px;
     cursor:pointer;
@@ -63,8 +65,8 @@ input::placeholder { color:#bbb; }
     box-shadow:0 10px 20px rgba(102,126,234,0.4);
 }
 .calculate-btn:active { transform:translateY(0); }
-.error {
-    color:#e74c3c;
+.error { 
+    color:#350c48;
     text-align:center;
     margin-top:15px;
     font-weight:bold;
@@ -371,20 +373,65 @@ input::placeholder { color:#bbb; }
     background: #6d5210;
     transform: rotate(90deg);
 }
+.footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    padding: 15px;
+    color: #ffffff;
+    font-size: 12px;
+    font-style: italic;
+    opacity: 0.9;
+    background: rgba(0, 0, 0, 0.2);
+    z-index: 100;
+}
+.footer strong {
+    font-weight: bold;
+    font-style: normal;
+}
+.footer-static {
+    text-align: center;
+    margin-top: 60px;
+    margin-bottom: 40px;
+    padding: 30px 20px;
+    color: #ffffff;
+    font-size: 12px;
+    font-style: italic;
+    opacity: 0.9;
+    white-space: nowrap;
+    clear: both;
+}
+.footer-static strong {
+    font-weight: bold;
+    font-style: normal;
+}
+.results-container h2,
+.results-container p,
+.results-container div {
+    color: #6d5210;
+}
 
+#resultsFooter {
+    color: #6d5210 !important;
+}
 </style>
 </head>
 <body>
     
 <!-- Input Page -->
+<!-- Input Page -->
 <div class="container" id="inputPage">
     <h1>Destiny Matrix Calculator</h1>
     <div class="input-group">
-        <label for="dob">Date of Birth</label>
-        <input type="text" id="dob" placeholder="DD/MM/YYYY" maxlength="10">
+        <input type="text" id="dob" placeholder="Type Date of Birth - DD/MM/YYYY" maxlength="10">
     </div>
     <button class="calculate-btn" onclick="calculate()">Calculate</button>
     <div class="error" id="error">Invalid date. Please try again.</div>
+    <div class="footer">
+    <strong>KARMA_DECODED</strong> | Maria Fistican | © All Rights Reserved
+</div>
 </div>
 
 <!-- Results Page -->
@@ -395,8 +442,15 @@ input::placeholder { color:#bbb; }
             <polygon points="50,5 61.8,38.2 98.8,38.2 68.2,58.8 79.4,92.1 50,71.5 20.6,92.1 31.8,58.8 1.2,38.2 38.2,38.2"/>
             <g id="innerTriangles" stroke="white" stroke-width="0.4" fill="none"></g>
         </svg>
-    
+    </div>
+    <button class="back-btn" onclick="goBack()">Calculate Another Date</button>
 </div>
+
+<div id="resultsFooter" style="display:none; text-align:center; padding:20px; color:#ffffff; font-size:11px; background:transparent;">
+    <strong>KARMA_DECODED</strong> | Maria Fistican | © All Rights Reserved
+</div>
+
+    
 
 <div class="modal-overlay" id="talentModal">
     <div class="papyrus-modal">
@@ -5648,6 +5702,8 @@ function displayResults(A,B,C,D,E,M,N,O,P,Q,M1,M2,N1,N2,O1,O2,P1,P2,Q1,Q2,CENTER
     createNewSections(A,B,C,D,E,M,N,O,P,Q,M1,M2,N1,N2,O1,O2,P1,P2,Q1,Q2,CENTER);
 }
 
+
+
 function drawTriangle(svg,p1,p2,p3){
     [[p1,p2],[p1,p3],[p2,p3]].forEach(([a,b])=>{
         const line=document.createElementNS('http://www.w3.org/2000/svg','line');
@@ -5902,6 +5958,11 @@ Your task is to identify these inherited mistakes, understand how they influence
     
     container.appendChild(div);
 });
+  
+  // Add footer to results page
+const footerDiv = document.createElement('div');
+footerDiv.innerHTML = '<div style="text-align:center; margin-top:60px; padding:20px; color:#ffffff; font-size:11px; white-space:nowrap; line-height:1;"><strong>KARMA_DECODED</strong> | Maria Fistican | © All Rights Reserved</div>';
+container.appendChild(footerDiv);
   
 
 // Auto-show women descriptions in Relationship section by default
