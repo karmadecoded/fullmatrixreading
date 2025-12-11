@@ -18,7 +18,7 @@ body {
 }
 }
 .container {
-    background:white;
+    background:transparent;
     padding:40px;
     border-radius:20px;
     box-shadow:0 20px 60px rgba(0,0,0,0.3);
@@ -76,12 +76,13 @@ input::placeholder { color:#bbb; }
 
 .results-container {
     display:none;
-    background:white;
+    background:rgba(255, 255, 255, 0.4);
     padding:40px;
     border-radius:20px;
     box-shadow:0 20px 60px rgba(0,0,0,0.3);
     max-width:900px;
     width:100%;
+
 }
 .results-container.show { display:block; }
 .results-title {
@@ -190,6 +191,7 @@ input::placeholder { color:#bbb; }
     margin-bottom:5px;
     line-height:1.4;
     white-space:pre-line;
+    color:#350c48 !important;
 }
 .recommendation {
     display:inline-block;
@@ -358,7 +360,7 @@ input::placeholder { color:#bbb; }
     position: absolute;
     top: 15px;
     right: 15px;
-    background: #8b6914;
+    background: #350c48;
     color: #f4e4c1;
     border: none;
     border-radius: 50%;
@@ -412,10 +414,296 @@ input::placeholder { color:#bbb; }
 .results-container div {
     color: #6d5210;
 }
+.new-section p {
+    color:#350c48 !important;
+}
+
+.new-section p div {
+    color:#350c48 !important;
+}
+
+.recommendation,
+.recommendation * {
+    color:#350c48 !important;
+}
 
 #resultsFooter {
     color: #6d5210 !important;
 }
+
+/* ============================================
+   MOBILE RESPONSIVE STYLES
+   ============================================ */
+
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+    
+    /* Input Container */
+    .container {
+        padding: 25px;
+        max-width: 100%;
+    }
+    
+    h1 {
+        font-size: 22px;
+        margin-bottom: 20px;
+    }
+    
+    input {
+        padding: 12px;
+        font-size: 16px;
+    }
+    
+    .calculate-btn {
+        padding: 12px;
+        font-size: 16px;
+    }
+    
+    /* Results Container */
+    .results-container {
+        padding: 20px;
+        max-width: 100%;
+    }
+    
+    .results-title {
+        font-size: 22px;
+        margin-bottom: 25px;
+    }
+    
+    /* Star Container */
+    .star-container {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 1;
+        margin-bottom: 20px;
+    }
+    
+    /* Energy Labels - Make them smaller on mobile */
+    .energy-label {
+        width: 35px;
+        height: 35px;
+        font-size: 12px;
+    }
+    
+    .energy-label.main {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+    }
+    
+    .energy-label.junction {
+        width: 35px;
+        height: 35px;
+        font-size: 13px;
+    }
+    
+    .energy-label.wing {
+        width: 30px;
+        height: 30px;
+        font-size: 11px;
+    }
+    
+    .energy-label.center {
+        width: 45px;
+        height: 45px;
+        font-size: 18px;
+    }
+    
+    /* Sections */
+    .new-section {
+        padding: 15px;
+        margin: 15px 0;
+    }
+    
+    .new-section h3 {
+        font-size: 18px;
+    }
+    
+    .new-section .section-desc {
+        padding: 10px;
+        font-size: 14px;
+    }
+    
+    .new-section p {
+        margin-left: 10px;
+        font-size: 14px;
+    }
+    
+    .section-header {
+        padding: 8px;
+    }
+    
+    .section-header h3 {
+        font-size: 18px;
+    }
+    
+    .section-arrow {
+        font-size: 16px;
+    }
+    
+    /* Buttons */
+    .back-btn {
+        padding: 10px 20px;
+        font-size: 14px;
+    }
+    
+    .talent-btn {
+        padding: 12px 20px;
+        font-size: 16px;
+        margin: 15px auto;
+    }
+    
+    .month-purpose-btn {
+        padding: 14px 25px;
+        font-size: 17px;
+        margin: 20px auto;
+    }
+    
+    .toggle-desc-btn {
+        padding: 6px 15px;
+        font-size: 13px;
+    }
+    
+    /* Recommendation Box */
+    .recommendation {
+        padding: 12px;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+    
+    /* Tables */
+    table {
+        font-size: 13px;
+    }
+    
+    th, td {
+        padding: 8px !important;
+    }
+    
+    /* Modals */
+    .modal-overlay {
+        padding: 10px;
+    }
+    
+    .papyrus-modal {
+        padding: 25px;
+        max-width: 95%;
+    }
+    
+    .papyrus-title {
+        font-size: 20px;
+        margin-bottom: 15px;
+    }
+    
+    .papyrus-content {
+        font-size: 14px;
+    }
+    
+    .image-modal {
+        padding: 15px;
+        max-width: 95%;
+    }
+    
+    .image-modal img {
+        max-height: calc(90vh - 60px);
+    }
+    
+    .modal-close {
+        width: 30px;
+        height: 30px;
+        font-size: 18px;
+        top: 10px;
+        right: 10px;
+    }
+    
+    /* Wealth Section Boxes */
+    .new-section p div {
+        font-size: 14px;
+        padding: 15px;
+    }
+    
+    /* Tasks Box */
+    div[style*="text-transform:uppercase"] {
+        font-size: 17px !important;
+    }
+}
+
+/* Extra Small Mobile Devices */
+@media (max-width: 480px) {
+    .container {
+        padding: 20px;
+    }
+    
+    h1 {
+        font-size: 20px;
+    }
+    
+    .results-title {
+        font-size: 20px;
+    }
+    
+    .energy-label {
+        width: 30px;
+        height: 30px;
+        font-size: 10px;
+    }
+    
+    .energy-label.main {
+        width: 35px;
+        height: 35px;
+        font-size: 14px;
+    }
+    
+    .energy-label.center {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+    }
+    
+    .new-section {
+        padding: 12px;
+    }
+    
+    .new-section h3 {
+        font-size: 16px;
+    }
+    
+    .new-section p {
+        font-size: 13px;
+    }
+    
+    table {
+        font-size: 12px;
+    }
+    
+    th, td {
+        padding: 6px !important;
+    }
+    
+    .recommendation {
+        font-size: 13px;
+    }
+    
+    .papyrus-modal {
+        padding: 20px;
+    }
+}
+
+/* Landscape Mode for Mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+    .star-container {
+        max-width: 400px;
+        margin: 0 auto 20px;
+    }
+    
+    .results-container {
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+}
+
 </style>
 </head>
 <body>
@@ -443,8 +731,7 @@ input::placeholder { color:#bbb; }
             <g id="innerTriangles" stroke="white" stroke-width="0.4" fill="none"></g>
         </svg>
     </div>
-    <button class="back-btn" onclick="goBack()">Calculate Another Date</button>
-</div>
+    
 
 <div id="resultsFooter" style="display:none; text-align:center; padding:20px; color:#ffffff; font-size:11px; background:transparent;">
     <strong>KARMA_DECODED</strong> | Maria Fistican | © All Rights Reserved
@@ -5741,7 +6028,7 @@ function showTalents(energies){
     html += '</div>';
     
     uniqueEnergies.forEach(energy => {
-        const multiplier = counts[energy] > 1 ? ` <span style="color:#8b6914; font-weight:bold;">x${counts[energy]}</span>` : '';
+        const multiplier = counts[energy] > 1 ? ` <span style="color:#350c48; font-weight:bold;">x${counts[energy]}</span>` : '';
         html += '<div style="margin:30px 0; padding:20px; background:rgba(139,105,20,0.1); border-radius:10px;">';
         html += `<div style="text-align:center; font-size:22px; font-weight:bold; color:#350c48; margin-bottom:15px;">Energy ${energy}${multiplier}</div>`;
         html += strongestTalentDescriptions[energy] || `Talent description for energy ${energy} coming soon...`;
@@ -5914,7 +6201,7 @@ Your task is to identify these inherited mistakes, understand how they influence
     const uniqueEnergies=[...new Set(sec.energies)];
     
     uniqueEnergies.forEach(e=>{
-        const multiplier = counts[e] > 1 ? ` <span style="color:#8b6914; font-weight:bold; font-size:18px;">x${counts[e]}</span>` : '';
+        const multiplier = counts[e] > 1 ? ` <span style="color:#350c48; font-weight:bold; font-size:18px;">x${counts[e]}</span>` : '';
         let description = sec.descriptions[e] || '';
         description = description.replace(/<div style="text-align:center;[^>]*>Energy \d+<\/div>/i, '');
         
