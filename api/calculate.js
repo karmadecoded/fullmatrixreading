@@ -16,16 +16,19 @@ module.exports = (req, res) => {
   }
 
   const [day, month, year] = dob.split("/").map(Number);
+
   const A = reduceToMax22(day);
   const B = reduceToMax22(month);
   const C = reduceToMax22(year.toString().split("").reduce((s, d) => s + parseInt(d), 0));
   const D = reduceToMax22(A + B + C);
   const E = reduceToMax22(A + B + C + D);
+
   const M = reduceToMax22(A + B);
   const N = reduceToMax22(B + C);
   const O = reduceToMax22(C + D);
   const P = reduceToMax22(D + E);
   const Q = reduceToMax22(E + A);
+
   const M1 = reduceToMax22(A + M);
   const M2 = reduceToMax22(M + B);
   const N1 = reduceToMax22(C + N);
@@ -36,6 +39,7 @@ module.exports = (req, res) => {
   const P2 = reduceToMax22(D + P);
   const Q1 = reduceToMax22(A + Q);
   const Q2 = reduceToMax22(E + Q);
+
   const CENTER = reduceToMax22(A + B + C + D + E);
 
   res.status(200).json({
