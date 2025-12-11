@@ -707,86 +707,151 @@ input::placeholder { color:#bbb; }
 </style>
 </head>
 <body>
+    
+<!-- Input Page -->
 <!-- Input Page -->
 <div class="container" id="inputPage">
-  <h1>Destiny Matrix Calculator</h1>
-  <form id="calcForm">
+    <h1>Destiny Matrix Calculator</h1>
     <div class="input-group">
-      <input type="text" id="dobInput" placeholder="DD/MM/YYYY" maxlength="10" required />
+        <input type="text" id="dob" placeholder="Type Date of Birth - DD/MM/YYYY" maxlength="10">
     </div>
-    <button type="submit" class="calculate-btn">Calculate</button>
-  </form>
-  <div class="error" id="error"></div>
-  <div class="footer">
+    <button class="calculate-btn" onclick="calculate()">Calculate</button>
+    <div class="error" id="error">Invalid date. Please try again.</div>
+    <div class="footer">
     <strong>KARMA_DECODED</strong> | Maria Fistican | © All Rights Reserved
-  </div>
+</div>
 </div>
 
 <!-- Results Page -->
 <div class="results-container" id="resultsPage">
-  <h2 class="results-title">Your Destiny Matrix Chart</h2>
-  <div class="star-container" id="starContainer">
-    <svg class="star-img" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <polygon points="50,5 61.8,38.2 98.8,38.2 68.2,58.8 79.4,92.1 50,71.5 20.6,92.1 31.8,58.8 1.2,38.2 38.2,38.2"/>
-      <g id="innerTriangles" stroke="white" stroke-width="0.4" fill="none"></g>
-    </svg>
-  </div>
-  <div id="resultsFooter" style="display:none; text-align:center; padding:20px; color:#ffffff; font-size:11px; background:transparent;">
+    <h2 class="results-title">Your Destiny Matrix Chart</h2>
+    <div class="star-container" id="starContainer">
+        <svg class="star-img" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 61.8,38.2 98.8,38.2 68.2,58.8 79.4,92.1 50,71.5 20.6,92.1 31.8,58.8 1.2,38.2 38.2,38.2"/>
+            <g id="innerTriangles" stroke="white" stroke-width="0.4" fill="none"></g>
+        </svg>
+    </div>
+    
+
+<div id="resultsFooter" style="display:none; text-align:center; padding:20px; color:#ffffff; font-size:11px; background:transparent;">
     <strong>KARMA_DECODED</strong> | Maria Fistican | © All Rights Reserved
-  </div>
 </div>
 
-<!-- Modals -->
+    
+
 <div class="modal-overlay" id="talentModal">
-  <div class="papyrus-modal">
-    <button class="modal-close" onclick="closeModal()">×</button>
-    <h2 class="papyrus-title">Your Strongest Talents</h2>
-    <div class="papyrus-content" id="talentContent"></div>
-  </div>
+    <div class="papyrus-modal">
+        <button class="modal-close" onclick="closeModal()">×</button>
+        <h2 class="papyrus-title">Your Strongest Talents</h2>
+        <div class="papyrus-content" id="talentContent"></div>
+    </div>
 </div>
 
 <div class="modal-overlay" id="karmicModal">
-  <div class="papyrus-modal">
-    <button class="modal-close" onclick="closeKarmicModal()">×</button>
-    <div class="papyrus-content" id="karmicContent"></div>
-  </div>
+    <div class="papyrus-modal">
+        <button class="modal-close" onclick="closeKarmicModal()">×</button>
+        <div class="papyrus-content" id="karmicContent"></div>
+    </div>
 </div>
 
-<!-- Script -->
-<!-- Script -->
+
+
+
 <script>
-document.getElementById("calcForm").addEventListener("submit", async function(e) {
-  e.preventDefault();
-  const dob = document.getElementById("dobInput").value;
+    
 
-  try {
-    const res = await fetch("/api/calculate", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ dob })
-    });
-    const data = await res.json();
+const dobInput = document.getElementById('dob');
 
-    if (data.error) {
-      document.getElementById("error").innerText = data.error;
-    } else {
-      // Backend returns all your A,B,C…CENTER values
-      displayResults(
-        data.A, data.B, data.C, data.D, data.E,
-        data.M, data.N, data.O, data.P, data.Q,
-        data.M1, data.M2, data.N1, data.N2,
-        data.O1, data.O2, data.P1, data.P2,
-        data.Q1, data.Q2, data.CENTER
-      );
-      document.getElementById("resultsPage").classList.add("show");
+// 🔥 AUTO-LOAD: Check if DOB already saved
+window.addEventListener('load', function(){
+    const savedDOB = localStorage.getItem('userDOB');
+    if(savedDOB){
+        dobInput.value = savedDOB;
+        calculate();
     }
-  } catch (err) {
-    document.getElementById("error").innerText = "Something went wrong.";
-    console.error(err);
-  }
 });
 
-// STRONGEST TALENT descriptions
+// ... [keep all your existing code: strongestTalentDescriptions, personalityDescriptions, etc.] ...
+
+// Input formatting
+dobInput.addEventListener('input', function(e){
+    let value = e.target.value.replace(/\D/g,'');
+    if(value.length >= 2) value = value.substring(0,2) + '/' + value.substring(2);
+    if(value.length >= 5) value = value.substring(0,5) + '/' + value.substring(5);
+    e.target.value = value.substring(0,10);
+});
+
+function reduceToMax22(num){
+    while(num > 22) num = num.toString().split('').reduce((s,d)=>s+parseInt(d),0);
+    return num;
+}
+
+// 🔥 UPDATED: Calculate with auto-save
+function calculate(){
+    const dob = dobInput.value;
+    const error = document.getElementById('error');
+    
+    error.classList.remove('show');
+    
+    if(!/^\d{2}\/\d{2}\/\d{4}$/.test(dob)){
+        error.classList.add('show');
+        setTimeout(()=>{error.classList.remove('show'); dobInput.value='';}, 2000);
+        return;
+    }
+    
+    const [day, month, year] = dob.split('/').map(Number);
+    if(day < 1 || day > 31 || month < 1 || month > 12){
+        error.classList.add('show');
+        setTimeout(()=>{error.classList.remove('show'); dobInput.value='';}, 2000);
+        return;
+    }
+    
+    // 💾 Save DOB
+    localStorage.setItem('userDOB', dob);
+    
+    // Calculate...
+    const A = reduceToMax22(day);
+    const B = reduceToMax22(month);
+    const C = reduceToMax22(year.toString().split('').reduce((s,d)=>s+parseInt(d),0));
+    const D = reduceToMax22(A+B+C);
+    const E = reduceToMax22(A+B+C+D);
+
+    const M = reduceToMax22(A+B);
+    const N = reduceToMax22(B+C);
+    const O = reduceToMax22(C+D);
+    const P = reduceToMax22(D+E);
+    const Q = reduceToMax22(E+A);
+
+    const M1 = reduceToMax22(A+M);
+    const M2 = reduceToMax22(M+B);
+    const N1 = reduceToMax22(C+N);
+    const N2 = reduceToMax22(B+N);
+    const O1 = reduceToMax22(D+O);
+    const O2 = reduceToMax22(C+O);
+    const P1 = reduceToMax22(E+P);
+    const P2 = reduceToMax22(D+P);
+    const Q1 = reduceToMax22(A+Q);
+    const Q2 = reduceToMax22(E+Q);
+
+    const CENTER = reduceToMax22(A+B+C+D+E);
+
+    displayResults(A,B,C,D,E,M,N,O,P,Q,M1,M2,N1,N2,O1,O2,P1,P2,Q1,Q2,CENTER);
+    
+    document.getElementById('inputPage').style.display='none';
+    document.getElementById('resultsPage').classList.add('show');
+}
+
+// ... [keep all your existing functions] ...
+
+// 🔥 UPDATED: Clear saved DOB when going back
+function goBack(){
+    localStorage.removeItem('userDOB');
+    document.getElementById('inputPage').style.display='block';
+    document.getElementById('resultsPage').classList.remove('show');
+    dobInput.value='';
+}
+
+// STRONGEST TALENT descriptions for each energy (1-22)
 const strongestTalentDescriptions = {
     1: `<div style="background:rgba(139,105,20,0.1); padding:20px; border-radius:10px; line-height:1.8;">
 Mastery of language — eloquence and the art of persuasion, the gift of a pioneer, outstanding leadership qualities, an active life stance, strength of will, strategic thinking, high intellect, and the talent of a teacher.
@@ -6028,11 +6093,14 @@ function drawTriangle(svg,p1,p2,p3){
 }
 
 function goBack(){
+    // Clear saved DOB
+    localStorage.removeItem('userDOB');
+    
+    // Reset page
     document.getElementById('inputPage').style.display='block';
     document.getElementById('resultsPage').classList.remove('show');
     dobInput.value='';
 }
-
 function closeModal(){
     document.getElementById('talentModal').classList.remove('show');
 }
@@ -6272,7 +6340,14 @@ Your task is to identify these inherited mistakes, understand how they influence
     
     container.appendChild(div);
 });
-  
+  // Add "Change DOB" button before footer
+const changeBtn = document.createElement('button');
+changeBtn.className = 'back-btn';
+changeBtn.textContent = 'Change Date of Birth';
+changeBtn.style.cssText = 'margin: 30px auto; display: block;';
+changeBtn.onclick = goBack;
+container.appendChild(changeBtn);
+
   // Add footer to results page
 const footerDiv = document.createElement('div');
 footerDiv.innerHTML = '<div style="text-align:center; margin-top:60px; padding:20px; color:#ffffff; font-size:11px; white-space:nowrap; line-height:1;"><strong>KARMA_DECODED</strong> | Maria Fistican | © All Rights Reserved</div>';
