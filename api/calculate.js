@@ -1,4 +1,4 @@
-export default function handler(req, res) {
+module.exports = (req, res) => {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
@@ -8,11 +8,6 @@ export default function handler(req, res) {
     return res.status(400).json({ error: "Date of birth required" });
   }
 
-  // TODO: verify Payhip token/email session here
-  // If not valid:
-  // return res.status(403).json({ error: "Access denied" });
-
-  // Your calculation logic goes here
   function reduceToMax22(num) {
     while (num > 22) {
       num = num.toString().split("").reduce((s, d) => s + parseInt(d), 0);
@@ -50,4 +45,4 @@ export default function handler(req, res) {
     O1, O2, P1, P2,
     Q1, Q2, CENTER
   });
-}
+};
