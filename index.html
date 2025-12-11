@@ -840,7 +840,6 @@ function calculate(){
     document.getElementById('inputPage').style.display='none';
     document.getElementById('resultsPage').classList.add('show');
 }
-
 // ... [keep all your existing functions] ...
 
 // 🔥 UPDATED: Clear saved DOB when going back
@@ -6340,13 +6339,7 @@ Your task is to identify these inherited mistakes, understand how they influence
     
     container.appendChild(div);
 });
-  // Add "Change DOB" button before footer
-const changeBtn = document.createElement('button');
-changeBtn.className = 'back-btn';
-changeBtn.textContent = 'Change Date of Birth';
-changeBtn.style.cssText = 'margin: 30px auto; display: block;';
-changeBtn.onclick = goBack;
-container.appendChild(changeBtn);
+
 
   // Add footer to results page
 const footerDiv = document.createElement('div');
