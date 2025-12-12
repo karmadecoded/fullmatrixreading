@@ -6301,39 +6301,63 @@ setTimeout(function(){
 
 </script> 
 <script>
-// --- Supabase verification code ---
+// --- Supabase verification code with DOB save ---
 const supabaseUrl = "https://ztivccuzdmoicxbuwcrd.supabase.co";
 const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp0aXZjY3V6ZG1vaWN4YnV3Y3JkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU1NTAwMTEsImV4cCI6MjA4MTEyNjAxMX0.wyPPADuegKCYXYTPij8jk76wO10G6zC5fK43zrFYVeA";
 const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
+// Check if email has access and if DOB is already saved
 async function verifyAccess(email) {
   const { data, error } = await supabaseClient
     .from('users')
-    .select('email')
+    .select('email, date_of_birth')
     .eq('email', email);
-
+  
   if (error) {
     const err = document.getElementById("error");
     err.innerText = "Error checking access.";
     err.style.display = "block";
+    return { hasAccess: false, hasDOB: false, savedDOB: null };
+  }
+  
+  if (data.length > 0) {
+    return {
+      hasAccess: true,
+      hasDOB: !!data[0].date_of_birth,
+      savedDOB: data[0].date_of_birth
+    };
+  }
+  
+  return { hasAccess: false, hasDOB: false, savedDOB: null };
+}
+
+// Save DOB to Supabase
+async function saveDOB(email, dob) {
+  const { error } = await supabaseClient
+    .from('users')
+    .update({ date_of_birth: dob })
+    .eq('email', email);
+  
+  if (error) {
+    console.error("Error saving DOB:", error);
     return false;
   }
-  return data.length > 0;
+  return true;
 }
 
 async function handleSubmit() {
   const email = document.getElementById("email").value.trim();
-  const dob = document.getElementById("dob").value.trim();
+  const dobInput = document.getElementById("dob");
   const err = document.getElementById("error");
-
-  // Check if fields are empty
-  if (!dob || !email) {
+  
+  // Check if email is empty
+  if (!email) {
     err.style.display = "block";
-    err.innerText = "Please enter email and date of birth.";
+    err.innerText = "Please enter your email.";
     setTimeout(() => { err.style.display = "none"; }, 3000);
     return;
   }
-
+  
   // Validate email format
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(email)) {
@@ -6342,17 +6366,67 @@ async function handleSubmit() {
     setTimeout(() => { err.style.display = "none"; }, 3000);
     return;
   }
-
+  
   // Check access in Supabase
-  const allowed = await verifyAccess(email);
-  if (!allowed) {
+  const accessInfo = await verifyAccess(email);
+  
+  if (!accessInfo.hasAccess) {
     err.innerHTML = '🔒 Access denied. <a href="https://payhip.com/b/QGKNz" target="_blank" style="color:#764ba2; font-weight:bold; text-decoration:underline;">Please purchase here</a>';
     err.style.display = "block";
     setTimeout(() => { err.style.display = "none"; }, 5000);
     return;
   }
-
-  // If verified, run calculate()
+  
+  // Email has access - check if DOB is already saved
+  if (accessInfo.hasDOB) {
+    // DOB already exists - use saved DOB and show results immediately
+    dobInput.value = accessInfo.savedDOB;
+    dobInput.disabled = true; // Disable the field
+    dobInput.style.display = "none"; // Hide it completely
+    calculate();
+    return;
+  }
+  
+  // DOB not saved yet - need to collect it
+  const dob = dobInput.value.trim();
+  
+  if (!dob) {
+    err.style.display = "block";
+    err.innerText = "Please enter your date of birth.";
+    setTimeout(() => { err.style.display = "none"; }, 3000);
+    return;
+  }
+  
+  // Show confirmation popup
+  const confirmed = confirm(
+    `⚠️ IMPORTANT: Please double-check your date of birth\n\n` +
+    `Date entered: ${dob}\n\n` +
+    `You can only enter this ONCE and cannot change it later.\n\n` +
+    `Is this correct?`
+  );
+  
+  if (!confirmed) {
+    // Let them re-enter
+    dobInput.value = '';
+    dobInput.focus();
+    return;
+  }
+  
+  // Save DOB to Supabase
+  const saved = await saveDOB(email, dob);
+  
+  if (!saved) {
+    err.style.display = "block";
+    err.innerText = "Error saving date of birth. Please try again.";
+    setTimeout(() => { err.style.display = "none"; }, 3000);
+    return;
+  }
+  
+  // Hide DOB field permanently for this email
+  dobInput.disabled = true;
+  dobInput.style.display = "none";
+  
+  // Show results
   calculate();
 }
 </script> 
