@@ -6337,6 +6337,14 @@ async function saveDOB(email, dob) {
   return true;
 }
 
+// TEMPORARY TEST
+async function testDB() {
+  const { data, error } = await supabaseClient.from('users').select('*');
+  console.log("TEST - All users:", data);
+  console.log("TEST - Any error:", error);
+}
+testDB();
+
 async function handleSubmit() {
   const email = document.getElementById("email").value.trim();
   const dobInput = document.getElementById("dob");
