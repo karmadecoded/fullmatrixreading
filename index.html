@@ -6310,17 +6310,30 @@ const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 async function verifyAccess(email) {
   const { data, error } = await supabaseClient
     .from('users')
-    .select('email')
+    .select('email, date_of_birth')  // Add date_of_birth here
     .eq('email', email);
   
   if (error) {
     const err = document.getElementById("error");
     err.innerText = "Error checking access.";
     err.style.display = "block";
-    return false;
+    return null;  // Change to null instead of false
   }
-  return data.length > 0;
+  return data.length > 0 ? data[0] : null;  // Return the user object, not just true/false
 }
+
+// Convert DD/MM/YYYY to YYYY-MM-DD
+function convertDateFormat(dateStr) {
+  const parts = dateStr.split('/');
+  if (parts.length !== 3) return null;
+  
+  const day = parts[0].padStart(2, '0');
+  const month = parts[1].padStart(2, '0');
+  const year = parts[2];
+  
+  return `${year}-${month}-${day}`;
+}
+
 
 // Save DOB to Supabase
 async function saveDOB(email, dob) {
@@ -6409,7 +6422,15 @@ async function handleSubmit() {
   }
   
   // Save DOB to Supabase
-  const saved = await saveDOB(email, dob);
+  // Convert and save DOB to Supabase
+const convertedDOB = convertDateFormat(dob);
+if (!convertedDOB) {
+  err.style.display = "block";
+  err.innerText = "Invalid date format. Please use DD/MM/YYYY";
+  setTimeout(() => { err.style.display = "none"; }, 3000);
+  return;
+}
+const saved = await saveDOB(email, convertedDOB);
   
   if (!saved) {
     err.style.display = "block";
