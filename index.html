@@ -6297,8 +6297,9 @@ setTimeout(function(){
     });
 }, 100);
 
-</script> 
+}  // ← THIS LINE WAS MISSING! Closes createNewSections
 
+</script> 
 <script>
 // --- Supabase verification code ---
 const supabaseUrl = "https://ztivccuzdmoicxbuwcrd.supabase.co";
@@ -6323,27 +6324,38 @@ async function verifyAccess(email) {
 async function handleSubmit() {
   const email = document.getElementById("email").value.trim();
   const dob = document.getElementById("dob").value.trim();
+  const err = document.getElementById("error");
 
+  // Check if fields are empty
   if (!dob || !email) {
-    const err = document.getElementById("error");
     err.style.display = "block";
     err.innerText = "Please enter email and date of birth.";
+    setTimeout(() => { err.style.display = "none"; }, 3000);
     return;
   }
 
+  // Validate email format
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    err.style.display = "block";
+    err.innerText = "⚠️ Invalid email format. Please enter a valid email address.";
+    setTimeout(() => { err.style.display = "none"; }, 3000);
+    return;
+  }
+
+  // Check access in Supabase
   const allowed = await verifyAccess(email);
   if (!allowed) {
-    const err = document.getElementById("error");
-    err.innerText = "Access denied. Please purchase first.";
+    err.innerHTML = '🔒 Access denied. <a href="https://payhip.com/b/QGKNz" target="_blank" style="color:#764ba2; font-weight:bold; text-decoration:underline;">Please purchase here</a>';
     err.style.display = "block";
+    setTimeout(() => { err.style.display = "none"; }, 5000);
     return;
   }
 
-  // If verified, run your existing calculate()
+  // If verified, run calculate()
   calculate();
-
 }
-</script>
+</script> 
 </body>
 </html>
 
