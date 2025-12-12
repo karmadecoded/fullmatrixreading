@@ -713,13 +713,18 @@ input::placeholder { color:#bbb; }
 <div class="container" id="inputPage">
     <h1>Destiny Matrix Calculator</h1>
     <div class="input-group">
-        <input type="text" id="dob" placeholder="Type Date of Birth - DD/MM/YYYY" maxlength="10">
+        <!-- NEW email field -->
+        <input type="email" id="email" placeholder="Enter your email" required>
     </div>
-    <button class="calculate-btn" onclick="calculate()">Calculate</button>
-    <div class="error" id="error">Invalid date. Please try again.</div>
+    <div class="input-group">
+        <input type="text" id="dob" placeholder="Type Date of Birth - DD/MM/YYYY" maxlength="10" required>
+    </div>
+    <!-- Button now calls handleSubmit instead of calculate -->
+    <button class="calculate-btn" onclick="handleSubmit()">Calculate</button>
+    <div class="error" id="error">Invalid date or access denied. Please try again.</div>
     <div class="footer">
-    <strong>KARMA_DECODED</strong> | Maria Fistican | © All Rights Reserved
-</div>
+        <strong>KARMA_DECODED</strong> | Maria Fistican | © All Rights Reserved
+    </div>
 </div>
 
 <!-- Results Page -->
@@ -758,98 +763,7 @@ input::placeholder { color:#bbb; }
 
 
 <script>
-    
-
-const dobInput = document.getElementById('dob');
-
-// 🔥 AUTO-LOAD: Check if DOB already saved
-window.addEventListener('load', function(){
-    const savedDOB = localStorage.getItem('userDOB');
-    if(savedDOB){
-        dobInput.value = savedDOB;
-        calculate();
-    }
-});
-
-// ... [keep all your existing code: strongestTalentDescriptions, personalityDescriptions, etc.] ...
-
-// Input formatting
-dobInput.addEventListener('input', function(e){
-    let value = e.target.value.replace(/\D/g,'');
-    if(value.length >= 2) value = value.substring(0,2) + '/' + value.substring(2);
-    if(value.length >= 5) value = value.substring(0,5) + '/' + value.substring(5);
-    e.target.value = value.substring(0,10);
-});
-
-function reduceToMax22(num){
-    while(num > 22) num = num.toString().split('').reduce((s,d)=>s+parseInt(d),0);
-    return num;
-}
-
-// 🔥 UPDATED: Calculate with auto-save
-function calculate(){
-    const dob = dobInput.value;
-    const error = document.getElementById('error');
-    
-    error.classList.remove('show');
-    
-    if(!/^\d{2}\/\d{2}\/\d{4}$/.test(dob)){
-        error.classList.add('show');
-        setTimeout(()=>{error.classList.remove('show'); dobInput.value='';}, 2000);
-        return;
-    }
-    
-    const [day, month, year] = dob.split('/').map(Number);
-    if(day < 1 || day > 31 || month < 1 || month > 12){
-        error.classList.add('show');
-        setTimeout(()=>{error.classList.remove('show'); dobInput.value='';}, 2000);
-        return;
-    }
-    
-    // 💾 Save DOB
-    localStorage.setItem('userDOB', dob);
-    
-    // Calculate...
-    const A = reduceToMax22(day);
-    const B = reduceToMax22(month);
-    const C = reduceToMax22(year.toString().split('').reduce((s,d)=>s+parseInt(d),0));
-    const D = reduceToMax22(A+B+C);
-    const E = reduceToMax22(A+B+C+D);
-
-    const M = reduceToMax22(A+B);
-    const N = reduceToMax22(B+C);
-    const O = reduceToMax22(C+D);
-    const P = reduceToMax22(D+E);
-    const Q = reduceToMax22(E+A);
-
-    const M1 = reduceToMax22(A+M);
-    const M2 = reduceToMax22(M+B);
-    const N1 = reduceToMax22(C+N);
-    const N2 = reduceToMax22(B+N);
-    const O1 = reduceToMax22(D+O);
-    const O2 = reduceToMax22(C+O);
-    const P1 = reduceToMax22(E+P);
-    const P2 = reduceToMax22(D+P);
-    const Q1 = reduceToMax22(A+Q);
-    const Q2 = reduceToMax22(E+Q);
-
-    const CENTER = reduceToMax22(A+B+C+D+E);
-
-    displayResults(A,B,C,D,E,M,N,O,P,Q,M1,M2,N1,N2,O1,O2,P1,P2,Q1,Q2,CENTER);
-    
-    document.getElementById('inputPage').style.display='none';
-    document.getElementById('resultsPage').classList.add('show');
-}
-// ... [keep all your existing functions] ...
-
-// 🔥 UPDATED: Clear saved DOB when going back
-function goBack(){
-    localStorage.removeItem('userDOB');
-    document.getElementById('inputPage').style.display='block';
-    document.getElementById('resultsPage').classList.remove('show');
-    dobInput.value='';
-}
-
+const dobInput=document.getElementById('dob');
 // STRONGEST TALENT descriptions for each energy (1-22)
 const strongestTalentDescriptions = {
     1: `<div style="background:rgba(139,105,20,0.1); padding:20px; border-radius:10px; line-height:1.8;">
@@ -6092,14 +6006,11 @@ function drawTriangle(svg,p1,p2,p3){
 }
 
 function goBack(){
-    // Clear saved DOB
-    localStorage.removeItem('userDOB');
-    
-    // Reset page
     document.getElementById('inputPage').style.display='block';
     document.getElementById('resultsPage').classList.remove('show');
     dobInput.value='';
 }
+
 function closeModal(){
     document.getElementById('talentModal').classList.remove('show');
 }
@@ -6289,6 +6200,8 @@ Your task is to identify these inherited mistakes, understand how they influence
     };
     contentDiv.appendChild(toggleBtn);
     
+    
+    
     // Add energies
     const counts={};
     sec.energies.forEach(e=>{counts[e]=(counts[e]||0)+1;});
@@ -6331,6 +6244,49 @@ Your task is to identify these inherited mistakes, understand how they influence
     
     div.appendChild(contentDiv);
     
+    const supabaseUrl = "https://ztivccuzdmoicxbuwcrd.supabase.co";
+const supabaseKey = "sb_publishable_LDxFPiMhmZDYIxZQDgM4-w_xzyMmUmn";
+const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+async function verifyAccess(email) {
+  const { data, error } = await supabase
+    .from('users')
+    .select('email')
+    .eq('email', email);
+
+  if (error) {
+    const err = document.getElementById("error");
+    err.innerText = "Error checking access.";
+    err.style.display = "block";
+    return false;
+  }
+  return data.length > 0;
+}
+
+async function handleSubmit() {
+  const email = document.getElementById("email").value.trim();
+  const dob = document.getElementById("dob").value.trim();
+
+  if (!dob || !email) {
+    const err = document.getElementById("error");
+    err.style.display = "block";
+    err.innerText = "Please enter email and date of birth.";
+    return;
+  }
+
+  const allowed = await verifyAccess(email);
+  if (!allowed) {
+    const err = document.getElementById("error");
+    err.innerText = "Access denied. Please purchase first.";
+    err.style.display = "block";
+    return;
+  }
+
+  // If verified, run your existing calculate()
+  calculate();
+}
+
+    
     // Toggle section on header click
     headerDiv.onclick=function(){
         contentDiv.classList.toggle('collapsed');
@@ -6339,8 +6295,7 @@ Your task is to identify these inherited mistakes, understand how they influence
     
     container.appendChild(div);
 });
-
-
+  
   // Add footer to results page
 const footerDiv = document.createElement('div');
 footerDiv.innerHTML = '<div style="text-align:center; margin-top:60px; padding:20px; color:#ffffff; font-size:11px; white-space:nowrap; line-height:1;"><strong>KARMA_DECODED</strong> | Maria Fistican | © All Rights Reserved</div>';
@@ -6361,6 +6316,7 @@ setTimeout(function(){
         }
     });
 }, 100);
+
 
 }
 </script>
