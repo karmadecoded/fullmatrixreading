@@ -1,23 +1,5 @@
 {
   "builds": [
-    {
-      "src": "public/**/*",
-      "use": "@vercel/static"
-    }
-  ],
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "X-Frame-Options",
-          "value": "ALLOWALL"
-        },
-        {
-          "key": "Content-Security-Policy",
-          "value": "frame-ancestors https://payhip.com https://*.payhip.com https://payhippages.com https://*.payhippages.com 'self';"
-        }
-      ]
-    }
+    { "src": "index.html", "use": "@vercel/static" }
   ]
 }
