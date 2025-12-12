@@ -6310,17 +6310,16 @@ const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 async function verifyAccess(email) {
   const { data, error } = await supabaseClient
     .from('users')
-    .select('email, date_of_birth')
+    .select('email')
     .eq('email', email);
   
   if (error) {
     const err = document.getElementById("error");
     err.innerText = "Error checking access.";
     err.style.display = "block";
-    return null;
+    return false;
   }
-  
-  return data.length > 0 ? data[0] : null;
+  return data.length > 0;
 }
 
 // Save DOB to Supabase
