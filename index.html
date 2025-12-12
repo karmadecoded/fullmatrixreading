@@ -16,7 +16,7 @@ body {
     align-items:center;
     padding:20px;
 }
-}
+
 .container {
     background:transparent;
     padding:40px;
@@ -704,7 +704,9 @@ input::placeholder { color:#bbb; }
     }
 }
 
+
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
     
@@ -763,7 +765,33 @@ input::placeholder { color:#bbb; }
 
 
 <script>
-const dobInput=document.getElementById('dob');
+let dobInput; // Declare at top level
+
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM loaded!'); // Test 1
+    
+    dobInput = document.getElementById('dob');
+    console.log('dobInput element:', dobInput); // Test 2
+    
+    if (dobInput) {
+        dobInput.addEventListener('input', function(e) {
+            console.log('Input event fired! Value:', e.target.value); // Test 3
+            
+            let value = e.target.value.replace(/\D/g, '');
+            console.log('After removing non-digits:', value); // Test 4
+            
+            if(value.length >= 2) value = value.substring(0,2) + '/' + value.substring(2);
+            if(value.length >= 5) value = value.substring(0,5) + '/' + value.substring(5);
+            
+            console.log('Final formatted value:', value); // Test 5
+            e.target.value = value.substring(0,10);
+        });
+        console.log('Event listener attached!'); // Test 6
+    } else {
+        console.error('DOB input not found!'); // Error check
+    }
+});
+
 // STRONGEST TALENT descriptions for each energy (1-22)
 const strongestTalentDescriptions = {
     1: `<div style="background:rgba(139,105,20,0.1); padding:20px; border-radius:10px; line-height:1.8;">
@@ -5836,12 +5864,6 @@ Someone in the lineage may have experienced imprisonment or restriction of freed
 
 };
 
-dobInput.addEventListener('input',function(e){
-    let value=e.target.value.replace(/\D/g,'');
-    if(value.length>=2) value=value.substring(0,2)+'/'+value.substring(2);
-    if(value.length>=5) value=value.substring(0,5)+'/'+value.substring(5);
-    e.target.value=value.substring(0,10);
-});
 
 function reduceToMax22(num){
     while(num>22) num=num.toString().split('').reduce((s,d)=>s+parseInt(d),0);
@@ -6244,12 +6266,47 @@ Your task is to identify these inherited mistakes, understand how they influence
     
     div.appendChild(contentDiv);
     
-    const supabaseUrl = "https://ztivccuzdmoicxbuwcrd.supabase.co";
-const supabaseKey = "sb_publishable_LDxFPiMhmZDYIxZQDgM4-w_xzyMmUmn";
-const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+    
+    // Toggle section on header click
+    headerDiv.onclick=function(){
+        contentDiv.classList.toggle('collapsed');
+        arrow.classList.toggle('collapsed');
+    };
+    
+    container.appendChild(div);
+});
+  
+  // Add footer to results page
+const footerDiv = document.createElement('div');
+footerDiv.innerHTML = '<div style="text-align:center; margin-top:60px; padding:20px; color:#ffffff; font-size:11px; white-space:nowrap; line-height:1;"><strong>KARMA_DECODED</strong> | Maria Fistican | © All Rights Reserved</div>';
+container.appendChild(footerDiv);
+  
+
+// Auto-show women descriptions in Relationship section by default
+setTimeout(function(){
+    document.querySelectorAll('.new-section').forEach(section => {
+        if(section.querySelector('h3')?.textContent === 'Relationship'){
+            const allWomenDivs = section.querySelectorAll('div[style*="display:none"]');
+            // Show every first div (women) of each pair
+            for(let i = 0; i < allWomenDivs.length; i += 2) {
+                allWomenDivs[i].style.display = 'block';
+                allWomenDivs[i].style.height = 'auto';
+                allWomenDivs[i].style.padding = '20px';
+            }
+        }
+    });
+}, 100);
+
+</script> 
+
+<script>
+// --- Supabase verification code ---
+const supabaseUrl = "https://ztivccuzdmoicxbuwcrd.supabase.co";
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp0aXZjY3V6ZG1vaWN4YnV3Y3JkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU1NTAwMTEsImV4cCI6MjA4MTEyNjAxMX0.wyPPADuegKCYXYTPij8jk76wO10G6zC5fK43zrFYVeA";
+const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
 async function verifyAccess(email) {
-  const { data, error } = await supabase
+  const { data, error } = await supabaseClient
     .from('users')
     .select('email')
     .eq('email', email);
@@ -6284,41 +6341,9 @@ async function handleSubmit() {
 
   // If verified, run your existing calculate()
   calculate();
-}
-
-    
-    // Toggle section on header click
-    headerDiv.onclick=function(){
-        contentDiv.classList.toggle('collapsed');
-        arrow.classList.toggle('collapsed');
-    };
-    
-    container.appendChild(div);
-});
-  
-  // Add footer to results page
-const footerDiv = document.createElement('div');
-footerDiv.innerHTML = '<div style="text-align:center; margin-top:60px; padding:20px; color:#ffffff; font-size:11px; white-space:nowrap; line-height:1;"><strong>KARMA_DECODED</strong> | Maria Fistican | © All Rights Reserved</div>';
-container.appendChild(footerDiv);
-  
-
-// Auto-show women descriptions in Relationship section by default
-setTimeout(function(){
-    document.querySelectorAll('.new-section').forEach(section => {
-        if(section.querySelector('h3')?.textContent === 'Relationship'){
-            const allWomenDivs = section.querySelectorAll('div[style*="display:none"]');
-            // Show every first div (women) of each pair
-            for(let i = 0; i < allWomenDivs.length; i += 2) {
-                allWomenDivs[i].style.display = 'block';
-                allWomenDivs[i].style.height = 'auto';
-                allWomenDivs[i].style.padding = '20px';
-            }
-        }
-    });
-}, 100);
-
 
 }
 </script>
 </body>
 </html>
+
