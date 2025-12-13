@@ -6306,21 +6306,6 @@ const supabaseUrl = "https://ztivccuzdmoicxbuwcrd.supabase.co";
 const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp0aXZjY3V6ZG1vaWN4YnV3Y3JkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU1NTAwMTEsImV4cCI6MjA4MTEyNjAxMX0.wyPPADuegKCYXYTPij8jk76wO10G6zC5fK43zrFYVeA";
 const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
-// YOUR ORIGINAL verifyAccess - keeping it the same
-async function verifyAccess(email) {
-  const { data, error } = await supabaseClient
-    .from('users')
-    .select('email, date_of_birth')  // Add date_of_birth here
-    .eq('email', email);
-  
-  if (error) {
-    const err = document.getElementById("error");
-    err.innerText = "Error checking access.";
-    err.style.display = "block";
-    return null;  // Change to null instead of false
-  }
-  return data.length > 0 ? data[0] : null;  // Return the user object, not just true/false
-}
 
 // Convert DD/MM/YYYY to YYYY-MM-DD
 function convertDateFormat(dateStr) {
@@ -6335,22 +6320,6 @@ function convertDateFormat(dateStr) {
 }
 
 
-// Save DOB via API route
-async function saveDOB(email, dob) {
-  const response = await fetch("/api/save-dob", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, dob })
-  });
-
-  const result = await response.json();
-  if (result.error) {
-    console.error("Error saving DOB:", result.error);
-    return false;
-  }
-  return result.success;
-}
-
 
 // TEMPORARY TEST
 async function testDB() {
@@ -6360,7 +6329,7 @@ async function testDB() {
 }
 testDB();
 async function handleSubmit() {
-  const email = document.getElementById("email").value.trim();
+  const email = document.getElementById("email").value.trim().toLowerCase();
   const dobInput = document.getElementById("dob");
   const dob = dobInput.value.trim();
   const err = document.getElementById("error");
@@ -6382,10 +6351,15 @@ async function handleSubmit() {
     return;
   }
   
-  // Check access in Supabase
-  const userData = await verifyAccess(email);
-  
-  if (!userData) {
+  // Check if email exists in Supabase
+  const { data: userData, error: fetchError } = await supabaseClient
+    .from('users')
+    .select('email, date_of_birth')
+    .eq('email', email)
+    .single();
+
+  // Email doesn't exist - access denied
+  if (fetchError || !userData) {
     err.innerHTML = '🔒 Access denied. <a href="https://payhip.com/b/QGKNz" target="_blank" style="color:#764ba2; font-weight:bold; text-decoration:underline;">Please purchase here</a>';
     err.style.display = "block";
     setTimeout(() => { err.style.display = "none"; }, 5000);
@@ -6397,8 +6371,7 @@ async function handleSubmit() {
     // DOB already saved - validate what they entered (if they entered anything)
     if (dob) {
       // They entered a DOB - check if it matches
-      const convertedDOB = convertDateFormat(dob);
-      if (userData.date_of_birth !== convertedDOB) {
+      if (userData.date_of_birth !== dob) {
         err.style.display = "block";
         err.innerText = "❌ Incorrect date of birth. Access denied.";
         setTimeout(() => { err.style.display = "none"; }, 5000);
@@ -6406,13 +6379,8 @@ async function handleSubmit() {
       }
     }
     
-    // Convert saved DOB to DD/MM/YYYY for calculator
-    const savedDate = userData.date_of_birth;
-    const parts = savedDate.split('-');
-    const displayDate = `${parts[2]}/${parts[1]}/${parts[0]}`;
-    
-    dobInput.value = displayDate;
-    dobInput.style.display = "none";
+    // Set the saved DOB and calculate
+    dobInput.value = userData.date_of_birth;
     calculate();
     return;
   }
@@ -6421,15 +6389,6 @@ async function handleSubmit() {
   if (!dob) {
     err.style.display = "block";
     err.innerText = "Please enter your date of birth.";
-    setTimeout(() => { err.style.display = "none"; }, 3000);
-    return;
-  }
-  
-  // Convert and validate DOB format
-  const convertedDOB = convertDateFormat(dob);
-  if (!convertedDOB) {
-    err.style.display = "block";
-    err.innerText = "Invalid date format. Please use DD/MM/YYYY";
     setTimeout(() => { err.style.display = "none"; }, 3000);
     return;
   }
@@ -6449,17 +6408,20 @@ async function handleSubmit() {
   }
   
   // Save DOB to Supabase
-  const saved = await saveDOB(email, convertedDOB);
-  
-  if (!saved) {
-    err.style.display = "block";
+  const { error: updateError } = await supabaseClient
+    .from('users')
+    .update({ date_of_birth: dob })
+    .eq('email', email);
+
+  if (updateError) {
+    console.error('Update error:', updateError);
     err.innerText = "Error saving date of birth. Please try again.";
+    err.style.display = "block";
     setTimeout(() => { err.style.display = "none"; }, 3000);
     return;
   }
   
-  // Hide DOB field and show results
-  dobInput.style.display = "none";
+  // DOB saved successfully - calculate
   calculate();
 }
 </script> 
