@@ -6356,7 +6356,6 @@ async function testDB() {
   console.log("TEST - Any error:", error);
 }
 testDB();
-
 async function handleSubmit() {
   const email = document.getElementById("email").value.trim();
   const dobInput = document.getElementById("dob");
@@ -6391,18 +6390,31 @@ async function handleSubmit() {
   }
   
   // User has access! Check if DOB already saved
-if (userData.date_of_birth) {
-  // DOB exists - convert back to DD/MM/YYYY format for display
-  const savedDate = userData.date_of_birth; // This is YYYY-MM-DD
-  const parts = savedDate.split('-');
-  const displayDate = `${parts[2]}/${parts[1]}/${parts[0]}`; // Convert to DD/MM/YYYY
+  if (userData.date_of_birth) {
+    // DOB already saved - validate what they entered (if they entered anything)
+    if (dob) {
+      // They entered a DOB - check if it matches
+      const convertedDOB = convertDateFormat(dob);
+      if (userData.date_of_birth !== convertedDOB) {
+        err.style.display = "block";
+        err.innerText = "❌ Incorrect date of birth. Access denied.";
+        setTimeout(() => { err.style.display = "none"; }, 5000);
+        return;
+      }
+    }
+    
+    // Convert saved DOB to DD/MM/YYYY for calculator
+    const savedDate = userData.date_of_birth;
+    const parts = savedDate.split('-');
+    const displayDate = `${parts[2]}/${parts[1]}/${parts[0]}`;
+    
+    dobInput.value = displayDate;
+    dobInput.style.display = "none";
+    calculate();
+    return;
+  }
   
-  dobInput.value = displayDate; // Set the converted date
-  dobInput.style.display = "none";
-  calculate();
-  return;
-}
-  // DOB not saved yet - need to collect it
+  // DOB not saved yet - need to collect it (FIRST TIME)
   if (!dob) {
     err.style.display = "block";
     err.innerText = "Please enter your date of birth.";
@@ -6410,7 +6422,16 @@ if (userData.date_of_birth) {
     return;
   }
   
-  // Show confirmation popup
+  // Convert and validate DOB format
+  const convertedDOB = convertDateFormat(dob);
+  if (!convertedDOB) {
+    err.style.display = "block";
+    err.innerText = "Invalid date format. Please use DD/MM/YYYY";
+    setTimeout(() => { err.style.display = "none"; }, 3000);
+    return;
+  }
+  
+  // Show confirmation popup (FIRST TIME ONLY)
   const confirmed = confirm(
     `⚠️ IMPORTANT: Please double-check your date of birth\n\n` +
     `Date entered: ${dob}\n\n` +
@@ -6425,15 +6446,7 @@ if (userData.date_of_birth) {
   }
   
   // Save DOB to Supabase
-  // Convert and save DOB to Supabase
-const convertedDOB = convertDateFormat(dob);
-if (!convertedDOB) {
-  err.style.display = "block";
-  err.innerText = "Invalid date format. Please use DD/MM/YYYY";
-  setTimeout(() => { err.style.display = "none"; }, 3000);
-  return;
-}
-const saved = await saveDOB(email, convertedDOB);
+  const saved = await saveDOB(email, convertedDOB);
   
   if (!saved) {
     err.style.display = "block";
@@ -6442,10 +6455,8 @@ const saved = await saveDOB(email, convertedDOB);
     return;
   }
   
-  // Hide DOB field permanently
+  // Hide DOB field and show results
   dobInput.style.display = "none";
-  
-  // Show results
   calculate();
 }
 </script> 
