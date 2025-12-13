@@ -1,5 +1,4 @@
 import { createClient } from '@supabase/supabase-js';
-import crypto from 'crypto';
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
@@ -7,30 +6,26 @@ const supabase = createClient(
 );
 
 export default async function handler(req, res) {
+  // LOG EVERYTHING
+  console.log('🔔 Webhook received!');
+  console.log('Body:', JSON.stringify(req.body, null, 2));
+  
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  // Verify webhook signature (optional but recommended)
-  const signature = req.headers['x-payhip-signature'];
-  if (signature && process.env.PAYHIP_WEBHOOK_SECRET) {
-    const hash = crypto
-      .createHmac('sha256', process.env.PAYHIP_WEBHOOK_SECRET)
-      .update(JSON.stringify(req.body))
-      .digest('hex');
-    
-    if (hash !== signature) {
-      return res.status(401).json({ error: 'Invalid signature' });
-    }
-  }
-
   const { buyer_email, sale_id } = req.body;
+  
+  console.log('📧 Email:', buyer_email);
+  console.log('🆔 Sale ID:', sale_id);
 
   if (!buyer_email) {
-    return res.status(400).json({ error: 'No email provided' });
+    console.error('❌ No email provided!');
+    return res.status(400).json({ error: 'No email provided', receivedBody: req.body });
   }
 
   // Check if email already exists
+  console.log('🔍 Checking if email exists...');
   const { data: existing } = await supabase
     .from('users')
     .select('email')
@@ -38,19 +33,21 @@ export default async function handler(req, res) {
     .single();
 
   if (existing) {
-    // Email already exists, don't insert duplicate
+    console.log('ℹ️ Email already exists');
     return res.status(200).json({ success: true, message: 'Email already exists' });
   }
 
   // Insert new user
+  console.log('💾 Inserting email into Supabase...');
   const { error } = await supabase
     .from('users')
     .insert([{ email: buyer_email }]);
 
   if (error) {
-    console.error('Supabase error:', error);
+    console.error('❌ Supabase error:', error);
     return res.status(400).json({ error: error.message });
   }
 
-  return res.status(200).json({ success: true });
+  console.log('✅ Success! Email added:', buyer_email);
+  return res.status(200).json({ success: true, email: buyer_email });
 }
