@@ -6391,14 +6391,17 @@ async function handleSubmit() {
   }
   
   // User has access! Check if DOB already saved
-  if (userData.date_of_birth) {
-    // DOB exists - auto-fill and hide the field
-    dobInput.value = userData.date_of_birth;
-    dobInput.style.display = "none";
-    calculate();
-    return;
-  }
+if (userData.date_of_birth) {
+  // DOB exists - convert back to DD/MM/YYYY format for display
+  const savedDate = userData.date_of_birth; // This is YYYY-MM-DD
+  const parts = savedDate.split('-');
+  const displayDate = `${parts[2]}/${parts[1]}/${parts[0]}`; // Convert to DD/MM/YYYY
   
+  dobInput.value = displayDate; // Set the converted date
+  dobInput.style.display = "none";
+  calculate();
+  return;
+}
   // DOB not saved yet - need to collect it
   if (!dob) {
     err.style.display = "block";
@@ -6448,4 +6451,3 @@ const saved = await saveDOB(email, convertedDOB);
 </script> 
 </body>
 </html>
-
