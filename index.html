@@ -6335,19 +6335,22 @@ function convertDateFormat(dateStr) {
 }
 
 
-// Save DOB to Supabase
+// Save DOB via API route
 async function saveDOB(email, dob) {
-  const { error } = await supabaseClient
-    .from('users')
-    .update({ date_of_birth: dob })
-    .eq('email', email);
-  
-  if (error) {
-    console.error("Error saving DOB:", error);
+  const response = await fetch("/api/save-dob", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, dob })
+  });
+
+  const result = await response.json();
+  if (result.error) {
+    console.error("Error saving DOB:", result.error);
     return false;
   }
-  return true;
+  return result.success;
 }
+
 
 // TEMPORARY TEST
 async function testDB() {
