@@ -10,14 +10,15 @@ export default async function handler(req, res) {
 
   const { data, error } = await supabase
     .from('users')
-    .update({ date_of_birth: dob })   // <-- use the correct column name
+    .update({ date_of_birth: dob })
     .eq('email', email);
+
+  console.log("REQ BODY:", req.body);
+  console.log("Update result:", data, error);
 
   if (error) {
     res.status(500).json({ error: error.message });
   } else {
     res.json({ success: true, data });
   }
-
-  console.log("REQ BODY:", req.body);
 }
