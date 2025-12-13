@@ -9,7 +9,7 @@ export default async function handler(req, res) {
   );
   
   const { data, error } = await supabase
-    .from('purchases')
+    .from('users') 
     .select('email, date_of_birth')
     .eq('email', email)
     .single();
