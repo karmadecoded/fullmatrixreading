@@ -1,19 +1,21 @@
+import { createClient } from '@supabase/supabase-js';
+
 export default async function handler(req, res) {
   const { email, dob } = req.body;
-  
+
   const supabase = createClient(
     process.env.SUPABASE_URL,
     process.env.SUPABASE_SERVICE_KEY
   );
-  
+
   const { data, error } = await supabase
-    .from('purchases')
-    .update({ date_of_birth: dob })
+    .from('users')          // <-- use your 'users' table
+    .update({ dob: dob })   // <-- update the 'dob' column
     .eq('email', email);
-  
+
   if (error) {
     res.status(500).json({ error: error.message });
   } else {
-    res.json({ success: true });
+    res.json({ success: true, data });
   }
 }
