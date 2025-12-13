@@ -9,8 +9,8 @@ export default async function handler(req, res) {
   );
 
   const { data, error } = await supabase
-    .from('users')          // <-- use your 'users' table
-    .update({ dob: dob })   // <-- update the 'dob' column
+    .from('users')
+    .update({ date_of_birth: dob })   // <-- use the correct column name
     .eq('email', email);
 
   if (error) {
@@ -19,6 +19,5 @@ export default async function handler(req, res) {
     res.json({ success: true, data });
   }
 
-  // 👇 Add this line inside the function, after everything else
   console.log("REQ BODY:", req.body);
 }
