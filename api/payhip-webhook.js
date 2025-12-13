@@ -14,12 +14,13 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { buyer_email, sale_id } = req.body;
+  // ✅ FIXED: Payhip uses 'email' not 'buyer_email' and 'id' not 'sale_id'
+  const { email, id } = req.body;
   
-  console.log('📧 Email:', buyer_email);
-  console.log('🆔 Sale ID:', sale_id);
+  console.log('📧 Email:', email);
+  console.log('🆔 Sale ID:', id);
 
-  if (!buyer_email) {
+  if (!email) {
     console.error('❌ No email provided!');
     return res.status(400).json({ error: 'No email provided', receivedBody: req.body });
   }
@@ -29,7 +30,7 @@ export default async function handler(req, res) {
   const { data: existing } = await supabase
     .from('users')
     .select('email')
-    .eq('email', buyer_email)
+    .eq('email', email)
     .single();
 
   if (existing) {
@@ -41,13 +42,13 @@ export default async function handler(req, res) {
   console.log('💾 Inserting email into Supabase...');
   const { error } = await supabase
     .from('users')
-    .insert([{ email: buyer_email }]);
+    .insert([{ email: email }]);
 
   if (error) {
     console.error('❌ Supabase error:', error);
     return res.status(400).json({ error: error.message });
   }
 
-  console.log('✅ Success! Email added:', buyer_email);
-  return res.status(200).json({ success: true, email: buyer_email });
+  console.log('✅ Success! Email added:', email);
+  return res.status(200).json({ success: true, email: email });
 }
