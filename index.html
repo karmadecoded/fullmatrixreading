@@ -6311,7 +6311,7 @@ async function verifyAccess(email) {
     const { data, error } = await supabaseClient
       .from('users')
       .select('email, date_of_birth')
-      .eq('email', email);
+      .ilike('email', email);
     
     if (error) {
       console.error('❌ Supabase error:', error);
