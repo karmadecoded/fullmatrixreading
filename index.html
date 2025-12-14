@@ -6387,9 +6387,9 @@ async function saveDOB(email, dob) {
     return false;
   }
 }
-
 // Main form submission handler
 async function handleSubmit() {
+    console.log('🔥 handleSubmit CALLED!'); // ADD THIS LINE FIRST
   const email = document.getElementById("email").value.trim();
   const dobInput = document.getElementById("dob");
   const dob = dobInput.value.trim();
