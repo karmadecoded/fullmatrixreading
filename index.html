@@ -6425,14 +6425,25 @@ async function handleSubmit() {
     return;
   }
   
-  // Convert and validate DOB format
-  const convertedDOB = convertDateFormat(dob);
-  if (!convertedDOB) {
+  // Validate DOB format BEFORE converting
+  if (!/^\d{2}\/\d{2}\/\d{4}$/.test(dob)) {
     err.style.display = "block";
     err.innerText = "Invalid date format. Please use DD/MM/YYYY";
     setTimeout(() => { err.style.display = "none"; }, 3000);
     return;
   }
+  
+  // Convert and validate DOB
+  const convertedDOB = convertDateFormat(dob);
+  if (!convertedDOB) {
+    err.style.display = "block";
+    err.innerText = "Invalid date. Please check your date of birth.";
+    setTimeout(() => { err.style.display = "none"; }, 3000);
+    return;
+  }
+  
+  console.log('📅 DOB entered:', dob);
+  console.log('📅 DOB converted:', convertedDOB);
   
   // Show confirmation popup (FIRST TIME ONLY)
   const confirmed = confirm(
@@ -6448,15 +6459,21 @@ async function handleSubmit() {
     return;
   }
   
-  // Save DOB to Supabase
+  // Save DOB to Supabase (sending YYYY-MM-DD format)
+  console.log('💾 Attempting to save DOB:', convertedDOB);
   const saved = await saveDOB(email, convertedDOB);
   
   if (!saved) {
     err.style.display = "block";
-    err.innerText = "Error saving date of birth. Please try again.";
-    setTimeout(() => { err.style.display = "none"; }, 3000);
+    err.innerText = "⚠️ Error saving date of birth. Please try again or contact support.";
+    setTimeout(() => { err.style.display = "none"; }, 5000);
     return;
   }
+  
+  console.log('✅ DOB saved successfully, proceeding to calculation...');
+  
+  // Small delay to ensure database commit completes
+  await new Promise(resolve => setTimeout(resolve, 500));
   
   // Hide DOB field and show results
   dobInput.style.display = "none";
