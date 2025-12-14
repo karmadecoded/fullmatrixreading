@@ -6301,25 +6301,41 @@ setTimeout(function(){
 
 </script> 
 <script>
-// --- Supabase verification code (KEEPING YOUR ORIGINAL + adding DOB save) ---
+// --- Supabase verification code ---
 const supabaseUrl = "https://ztivccuzdmoicxbuwcrd.supabase.co";
 const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp0aXZjY3V6ZG1vaWN4YnV3Y3JkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU1NTAwMTEsImV4cCI6MjA4MTEyNjAxMX0.wyPPADuegKCYXYTPij8jk76wO10G6zC5fK43zrFYVeA";
 const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
-// YOUR ORIGINAL verifyAccess - keeping it the same
 async function verifyAccess(email) {
-  const { data, error } = await supabaseClient
-    .from('users')
-    .select('email, date_of_birth')  // Add date_of_birth here
-    .eq('email', email);
-  
-  if (error) {
-    const err = document.getElementById("error");
-    err.innerText = "Error checking access.";
-    err.style.display = "block";
-    return null;  // Change to null instead of false
+  try {
+    const { data, error } = await supabaseClient
+      .from('users')
+      .select('email, date_of_birth')
+      .eq('email', email);
+    
+    if (error) {
+      console.error('❌ Supabase error:', error);
+      const err = document.getElementById("error");
+      err.innerText = "Error checking access.";
+      err.style.display = "block";
+      return null;
+    }
+    
+    console.log('📊 Query result:', data);
+    console.log('📊 Number of rows:', data.length);
+    
+    if (data && data.length > 0) {
+      console.log('✅ User found:', data[0]);
+      return data[0];
+    }
+    
+    console.log('❌ No user found with this email');
+    return null;
+    
+  } catch (error) {
+    console.error('❌ Unexpected error:', error);
+    return null;
   }
-  return data.length > 0 ? data[0] : null;  // Return the user object, not just true/false
 }
 
 // Convert DD/MM/YYYY to YYYY-MM-DD
@@ -6334,8 +6350,40 @@ function convertDateFormat(dateStr) {
   return `${year}-${month}-${day}`;
 }
 
+// Save DOB via API route - MOVED OUTSIDE handleSubmit
+async function saveDOB(email, dob) {
+  try {
+    console.log('🌐 Calling API to save DOB...');
+    console.log('📧 Email:', email);
+    console.log('📅 DOB:', dob);
+    
+    const response = await fetch('/api/save-dob', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, dob })
+    });
+    
+    const result = await response.json();
+    
+    console.log('📦 API Response:', result);
+    
+    if (!response.ok || !result.success) {
+      console.error('❌ API Error:', result.error);
+      return false;
+    }
+    
+    console.log('✅ DOB saved successfully!');
+    return true;
+    
+  } catch (error) {
+    console.error('❌ Network error calling API:', error);
+    return false;
+  }
+}
 
-// Save DOB via API route
+// Main form submission handler
 async function handleSubmit() {
   const email = document.getElementById("email").value.trim();
   const dobInput = document.getElementById("dob");
@@ -6394,7 +6442,6 @@ async function handleSubmit() {
     if (dob) {
       console.log('🔄 User entered DOB, checking if it matches...');
       
-      // They entered a DOB - check if it matches
       const convertedDOB = convertDateFormat(dob);
       console.log('📅 Converted entered DOB:', convertedDOB);
       console.log('📅 Stored DOB in DB:', userData.date_of_birth);
@@ -6493,6 +6540,3 @@ async function handleSubmit() {
   dobInput.style.display = "none";
   calculate();
 }
-</script> 
-</body>
-</html>
