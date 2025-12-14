@@ -6356,6 +6356,7 @@ async function saveDOB(email, dob) {
     console.log('🌐 Calling API to save DOB...');
     console.log('📧 Email:', email);
     console.log('📅 DOB:', dob);
+    console.log('🔗 API URL:', '/api/save-dob');
     
     const response = await fetch('/api/save-dob', {
       method: 'POST',
@@ -6364,6 +6365,9 @@ async function saveDOB(email, dob) {
       },
       body: JSON.stringify({ email, dob })
     });
+    
+    console.log('📡 Response status:', response.status);
+    console.log('📡 Response OK?:', response.ok);
     
     const result = await response.json();
     
@@ -6379,6 +6383,7 @@ async function saveDOB(email, dob) {
     
   } catch (error) {
     console.error('❌ Network error calling API:', error);
+    console.error('❌ Error details:', error.message);
     return false;
   }
 }
@@ -6550,4 +6555,3 @@ dobInput.value = displayDate;
 dobInput.style.display = "none";
 calculate();
   
-
