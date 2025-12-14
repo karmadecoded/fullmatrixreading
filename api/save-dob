@@ -55,7 +55,7 @@ export default async function handler(req, res) {
       .from('users')
       .select('email, date_of_birth')
       .eq('email', email)
-      .single();
+      .maybeSingle(); 
 
     if (checkError) {
       console.error("❌ Error checking user:", checkError);
@@ -82,7 +82,7 @@ export default async function handler(req, res) {
     const { data, error } = await supabase
       .from('users')
       .update({ date_of_birth: dob })
-      .eq('email', email)
+      .ilike('email', email)
       .select();
 
     if (error) {
