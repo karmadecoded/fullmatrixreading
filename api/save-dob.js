@@ -54,7 +54,7 @@ export default async function handler(req, res) {
     const { data: existingUser, error: checkError } = await supabase
       .from('users')
       .select('email, date_of_birth')
-      .eq('email', email)
+       .ilike('email', email)
       .maybeSingle(); 
 
     if (checkError) {
