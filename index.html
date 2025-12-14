@@ -6521,22 +6521,33 @@ async function handleSubmit() {
   }
   
   // Save DOB to Supabase (sending YYYY-MM-DD format)
-  console.log('💾 Attempting to save DOB:', convertedDOB);
-  const saved = await saveDOB(email, convertedDOB);
-  
-  if (!saved) {
-    err.style.display = "block";
-    err.innerText = "⚠️ Error saving date of birth. Please try again or contact support.";
-    setTimeout(() => { err.style.display = "none"; }, 5000);
-    return;
-  }
-  
-  console.log('✅ DOB saved successfully, proceeding to calculation...');
-  
-  // Small delay to ensure database commit completes
-  await new Promise(resolve => setTimeout(resolve, 500));
-  
-  // Hide DOB field and show results
-  dobInput.style.display = "none";
-  calculate();
+console.log('💾 Attempting to save DOB:', convertedDOB);
+const saved = await saveDOB(email, convertedDOB);
+
+if (!saved) {
+  err.style.display = "block";
+  err.innerText = "⚠️ Error saving date of birth. Please try again or contact support.";
+  setTimeout(() => { err.style.display = "none"; }, 5000);
+  return;
 }
+
+console.log('✅ DOB saved successfully, proceeding to calculation...');
+
+// UPDATE: Set the userData object so the app knows DOB is now saved
+userData.date_of_birth = convertedDOB;
+
+// Small delay to ensure database commit completes
+await new Promise(resolve => setTimeout(resolve, 500));
+
+// Convert the DOB to DD/MM/YYYY format for display
+const parts = convertedDOB.split('-');
+const displayDate = `${parts[2]}/${parts[1]}/${parts[0]}`;
+
+// Update the input field with the formatted date
+dobInput.value = displayDate;
+
+// Hide DOB field and show results
+dobInput.style.display = "none";
+calculate();
+  
+ 
