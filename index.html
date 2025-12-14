@@ -6353,12 +6353,6 @@ async function saveDOB(email, dob) {
 
 
 // TEMPORARY TEST
-async function testDB() {
-  const { data, error } = await supabaseClient.from('users').select('*');
-  console.log("TEST - All users:", data);
-  console.log("TEST - Any error:", error);
-}
-testDB();
 async function handleSubmit() {
   const email = document.getElementById("email").value.trim();
   const dobInput = document.getElementById("dob");
@@ -6393,23 +6387,41 @@ async function handleSubmit() {
   }
   
   // User has access! Check if DOB already saved
+  console.log('👤 User data:', userData);
+  console.log('📅 Stored DOB:', userData.date_of_birth);
+  console.log('📝 Entered DOB:', dob);
+  
   if (userData.date_of_birth) {
+    console.log('✓ DOB already exists in database');
+    
     // DOB already saved - validate what they entered (if they entered anything)
     if (dob) {
+      console.log('🔄 User entered DOB, checking if it matches...');
+      
       // They entered a DOB - check if it matches
       const convertedDOB = convertDateFormat(dob);
+      console.log('📅 Converted entered DOB:', convertedDOB);
+      console.log('📅 Stored DOB in DB:', userData.date_of_birth);
+      
       if (userData.date_of_birth !== convertedDOB) {
+        console.error('❌ DOB MISMATCH!');
+        console.error('Expected:', userData.date_of_birth);
+        console.error('Got:', convertedDOB);
         err.style.display = "block";
         err.innerText = "❌ Incorrect date of birth. Access denied.";
         setTimeout(() => { err.style.display = "none"; }, 5000);
         return;
       }
+      
+      console.log('✅ DOB matches!');
     }
     
     // Convert saved DOB to DD/MM/YYYY for calculator
     const savedDate = userData.date_of_birth;
     const parts = savedDate.split('-');
     const displayDate = `${parts[2]}/${parts[1]}/${parts[0]}`;
+    
+    console.log('🎯 Loading calculator with DOB:', displayDate);
     
     dobInput.value = displayDate;
     dobInput.style.display = "none";
