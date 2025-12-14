@@ -6424,13 +6424,28 @@ async function handleSubmit() {
   const userData = await verifyAccess(email);
   
   if (!userData) {
-    console.log('❌ NO ACCESS - User not found in database');
-    err.innerHTML = '🔒 Access denied. <a href="https://payhip.com/b/QGKNz" target="_blank" style="color:#764ba2; font-weight:bold; text-decoration:underline;">Please purchase here</a>';
-    err.style.display = "block";
-    setTimeout(() => { err.style.display = "none"; }, 5000);
-    return;
-  }
-  
+  console.log('❌ NO ACCESS - User not found in database');
+  err.innerHTML = `
+    <div style="background: linear-gradient(135deg, #350c48 0%, #4a1563 100%); border: 2px solid #ccae79; border-radius: 12px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+      <div style="color: #ccae79; font-size: 18px; font-weight: bold; margin-bottom: 15px;">
+        🔒 Access Denied
+      </div>
+      <div style="background: rgba(202, 175, 224, 0.15); border-left: 4px solid #ccae79; padding: 12px; margin: 10px 0; border-radius: 6px;">
+        <div style="color: #caafe0; font-size: 14px; line-height: 1.6;">
+          ⏳ <strong style="color: white;">Just purchased?</strong><br>
+          Please wait 1-2 minutes for your access to activate, then refresh this page.
+        </div>
+      </div>
+      <div style="color: #caafe0; font-size: 14px; margin-top: 15px;">
+        📦 Don't have access yet? 
+        <a href="https://payhip.com/b/QGKNz" target="_blank" style="color:#ccae79; font-weight:bold; text-decoration:underline;">Purchase the Full Matrix Reading here</a>
+      </div>
+    </div>
+  `;
+  err.style.display = "block";
+  setTimeout(() => { err.style.display = "none"; }, 8000);
+  return;
+}
   console.log('✅ User found in database!');
   
   // User has access! Check if DOB already saved
