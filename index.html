@@ -6342,8 +6342,14 @@ async function handleSubmit() {
   const dob = dobInput.value.trim();
   const err = document.getElementById("error");
   
+  console.log('🚀 ===== FORM SUBMITTED =====');
+  console.log('📧 Email entered:', email);
+  console.log('📅 DOB entered:', dob);
+  console.log('============================');
+  
   // Check if email is empty
   if (!email) {
+    console.log('❌ No email provided');
     err.style.display = "block";
     err.innerText = "Please enter your email.";
     setTimeout(() => { err.style.display = "none"; }, 3000);
@@ -6353,21 +6359,28 @@ async function handleSubmit() {
   // Validate email format
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(email)) {
+    console.log('❌ Invalid email format');
     err.style.display = "block";
     err.innerText = "⚠️ Invalid email format. Please enter a valid email address.";
     setTimeout(() => { err.style.display = "none"; }, 3000);
     return;
   }
   
+  console.log('✅ Email format valid');
+  
   // Check access in Supabase
+  console.log('🔍 Checking access in Supabase...');
   const userData = await verifyAccess(email);
   
   if (!userData) {
+    console.log('❌ NO ACCESS - User not found in database');
     err.innerHTML = '🔒 Access denied. <a href="https://payhip.com/b/QGKNz" target="_blank" style="color:#764ba2; font-weight:bold; text-decoration:underline;">Please purchase here</a>';
     err.style.display = "block";
     setTimeout(() => { err.style.display = "none"; }, 5000);
     return;
   }
+  
+  console.log('✅ User found in database!');
   
   // User has access! Check if DOB already saved
   console.log('👤 User data:', userData);
@@ -6375,7 +6388,7 @@ async function handleSubmit() {
   console.log('📝 Entered DOB:', dob);
   
   if (userData.date_of_birth) {
-    console.log('✓ DOB already exists in database');
+    console.log('✓ DOB already exists in database - RETURNING USER');
     
     // DOB already saved - validate what they entered (if they entered anything)
     if (dob) {
@@ -6412,13 +6425,19 @@ async function handleSubmit() {
     return;
   }
   
+  // === NEW USER PATH - DOB IS NULL ===
+  console.log('🆕 NEW USER - DOB is NULL in database');
+  
   // DOB not saved yet - need to collect it (FIRST TIME)
   if (!dob) {
+    console.log('⚠️ User did not enter DOB yet');
     err.style.display = "block";
     err.innerText = "Please enter your date of birth.";
     setTimeout(() => { err.style.display = "none"; }, 3000);
     return;
   }
+  
+  console.log('✅ User entered DOB:', dob);
   
   // Validate DOB format BEFORE converting
   if (!/^\d{2}\/\d{2}\/\d{4}$/.test(dob)) {
