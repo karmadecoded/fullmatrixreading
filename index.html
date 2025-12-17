@@ -6094,7 +6094,221 @@ document.addEventListener('click', function(e){
         closeKarmicModal();
     }
 });
+function calculateKarmicCodes(A,B,C,D,E,M,N,O,P,Q,M1,M2,N1,N2,O1,O2,P1,P2,Q1,Q2){
+    // Descriptions for each code
+    const codeDescriptions = {
+    "18-6-6": "Esotericism and Fear. In a past life you practiced esotericism or magic, sometimes through manipulation or deception. You may have used black magic, love spells, or lies to control others. In this life you constantly seek love and attention, but it feels never enough. Lesson: learn to build harmonious, long-term relationships, forgive, and never resort to dark practices again.",
+    
+    "18-9-9": "Loneliness. In a past life you were left alone or abandoned. In this life you often feel nobody loves you, even when they do. You may enter relationships only out of fear of being alone. Lesson: learn to enjoy solitude, see it as freedom, and embrace yourself.",
+    
+    "18-11-11": " Aggression. In a past life you met aggressors or were aggressive yourself, causing suffering. In this life you must not enter aggression, forgive, and break the cycle of violence.",
+    
+    "9-9-18": "Dark Esotericism. In a past life you misused esoteric power against others, even loved ones. Lesson: now you must serve for good, never cling to partners through control, and redeem your past misuse.",
+    
+    "15-5-8": " Betrayal. In a past life you betrayed your partner through sex or infidelity. In this life you fear betrayal and attract it again and again. Lesson: accept, forgive, and break the circle.",
+    
+    "15-20-5": "Excess. In a past life you lived through addictions, betrayals, or even prison. You may have abandoned family. Lesson: now you must build trust, respect family traditions, and avoid destructive indulgence.",
+    
+    "18-3-12": "Suffering. In a past life you endured beatings or painful dependence. In this life you may fall into toxic ties and sacrifice yourself. Lesson: break free, stop self-destruction, and grow inner strength.",
+    
+    "9-15-6": "Passion. In a past life you chased passion and sex endlessly. You were a seducer or betrayer. Lesson: resist temptation, avoid betrayal, and cultivate fidelity.",
+    
+    "6-17-11": "Self-Sacrifice. In a past life you destroyed yourself for relationships, undervaluing your talents. In this life you may feel undeserving of love or success. Lesson: believe in your talents, do not sacrifice yourself, and balance family with career.",
+    
+    "12-19-7": "The Warrior. In a past life you fought battles, injured or even killed people. You were aggressive in your family, tyrannized loved ones, or abandoned them for military service, politics, or your country. Lesson: in this life you must dedicate time to your family, control your aggression, and avoid politics or military structures with constant travel. Any long absences will harm your family unless you keep balance. This code also appears in those who killed or abused their partner. In this life you may feel surrounded by tyrants and despots, or feel that you give everything away to others — this is your karmic correction.",
+    
+    "9-12-3": "Devotion. In a past life you sacrificed yourself for love, losing self-worth. You may have given up your talents for family. Lesson: in this life you must believe in your talents, avoid self-sacrifice, and prioritize career before family.",
+    
+    "3-22-19": "The Unborn Child. In a past life you may not have been born, or you were a mother who aborted. In this life you unconsciously seek maternal love and may struggle with your mother. Lesson: heal maternal relationships and never repeat destructive cycles.",
+    
+    "21-4-10": " Suppression. In a past life you were oppressed or manipulated, with no choice. In this life you are given ease and luck. Lesson: embrace independence, try new things, and never let others suppress you.",
+    
+    "3-13-10": " The Risk‑Taker. In a past life you carried the energy of self‑destruction. In this life you must keep your passion for risk and adrenaline, but within healthy limits. You must constantly transform, change yourself inside, and move into everything new. Lesson: channel risk into growth, not harm.",
+    
+    "6-14-8": " The Dictator. In a past life you tried to bend the whole world and everyone to your will. In this life you must find contact with yourself instead of forcing others. Lesson: stop trying to dominate, learn self‑connection, and build harmony.",
+    
+    "12-17-5": "The Genius. You carry the combination of fame and brilliant creativity. In a past life your genius sometimes led to mental disorders. In this life you must use your talent wisely, protect your mind, and channel your gift into creation. Lesson: embrace your genius, but balance it with stability and care.",
+   
+    "21-10-16": " The Crusader. In a past life you were a warrior of faith, fighting for your religion or belief. You lived outside the home, away from family. In this life you must focus on your family instead of fighting everyone around you. Lesson: do not battle endlessly for who is right or wrong, because that destroys relationships. Build peace and balance instead.",
 
+    "6-8-20": " Family Conflict. In a past life you faced rejection from your family or your partner’s family. There was conflict between clans. In this life you must earn the love of your family and your partner’s family. Lesson: never fight against the family of your spouse; build respect and harmony.",
+
+    "3-7-22": " The Prisoner. In a past life you lived without freedom, perhaps in prison or captivity. In this life you may unconsciously want to break free from everyone, which can destroy relationships. Lesson: learn to build connections without running away, and embrace freedom responsibly.",
+
+    "9-3-21": " The Jailer. In a past life you restricted others’ freedom. In this life you will meet your prisoner again — often as a parent, partner, or close person. Lesson: release the urge to dominate or suppress others, and build relationships based on equality.",
+
+    "6-5-17": "Pride. In a past life your pride and arrogance destroyed relationships. You were consumed by fame or self‑importance. In this life you may feel unloved or unsuccessful. Lesson: overcome pride, accept yourself, and build humble, harmonious relationships.",
+
+    "21-7-13": " The Restrictor. In a past life you limited others’ freedom, even to the point of suicide or violence. In this life you must learn to respect both your own and others’ freedom. Lesson: build ecological, balanced relationships without control or oppression.",
+
+    "15-8-11": "The Aggressor. In a past life you beat or abused your partner, acted irresponsibly, and destroyed relationships. In this life you must learn to express emotions constructively and build relationships on understanding. Lesson: transform aggression into compassion.",
+
+    "18-6-15": " The Witch. In a past life you practiced curses, evil eye, or black magic. You were deeply involved in dark esotericism. In this life you will face temptations to harm others again. Lesson: resist, stay on the side of light, share wisdom, and never use dark practices.",
+
+    "6-20-14": " The Victim. In a past life you lived in financial dependence, often restricted by parents or partners. You sacrificed yourself and lived in depression. In this life you must break free from victimhood, never sacrifice yourself, and build independence.",
+
+    "21-10-7": "The Spiritual Warrior. In a past life you fought for truth and religion, living outside family. In this life you must focus on family instead of endless battles. Lesson: do not fight to prove your rightness in relationships; build love and harmony instead.",
+    
+    "12-16-4": "The Emperor. In a past life you were an emperor, a powerful tyrant who suppressed others. You unconsciously extinguished the energy of those around you, especially your partner. Lesson: in this life you must not repeat those patterns. Do not dominate or destroy relationships. Instead, cultivate love, build harmony, and strengthen compassion. Your task is to transform authority into guidance and power into service.",
+
+    "5-14-19": "Code 5-14-19 — The Millionaire. You were born to become very wealthy. In the minus, you may live as a simple teacher or caretaker. In the plus, you absorb knowledge, pass it on, and create your own team or system. If you are a woman with this code, men around you will draw strong energy from you — your power can even make a man into a president.",
+    
+    "6-5": "Code 6-5 — Beauty and Home. You were a person of beauty, warmth, and comfort. You are naturally hospitable, and people enjoy being around you. In this life you must realize yourself by creating harmony and coziness in your home and relationships.",
+    
+    "9-6-15": "Code 9-6-15 — The Creator. You must leave something behind: a book, a painting, or another work of art. All your dreams can come true, and you strongly attract what you desire. Lesson: do not fall into dependency. You must follow your dream and not be afraid to realize it.",
+    
+    "9-20-11": "Code 9-20-11 — Family Continuation. In a past life your family line weakened. In this life you must correct it: create a family, have and raise children, and continue your lineage.",
+    
+    "10-15-5": "Code 10-15-5 — The Spiritual Teacher. You come into this life with natural wisdom. You are drawn to deep questions, you gather knowledge, and you must pass it on to others. Lesson: never refuse help or advice when asked.",
+    
+    "15-21-6": "Code 15-21-6 — The Reveler. You were a person of indulgence and parties. To transform this code into the positive, you must work toward social recognition, popularity, and the status of a celebrated star.",
+    
+    "8-13-5": "Code 8-13-5 — The Reformer. You are meant to leave your mark on history. You are a rational advisor, able to see important details and give wise counsel.",
+    
+    "17-5-6": "Code 17-5-6 — The Artist. You must see beauty in the world and create it around you through your vision and talents.",
+    
+    "18-5-5": "Code 18-5-5 — The Magician. You possess magical knowledge. You must bring this wisdom into the world.",
+    
+    "18-7-7": "Code 18-7-7 — The Spiritual Warrior. You may fear work or travel, or doubt your ability to succeed. Lesson: defend your rights, become a spiritual warrior and priest.",
+    
+    "18-8-8": "Code 18-8-8 — The Distrustful. You do not trust this world. You constantly look for deception and betrayal, which you especially fear. Lesson: learn trust and release fear.",
+    
+    "19-7": "Code 19-7 — Wealth. In the plus, this is one of the most financially powerful codes. You can achieve great success in money if you work and strive toward it.",
+    
+    "18-10-10": "Code 18-10-10 — Control and Surrender. You fear trusting God or higher powers, and you cling to total control. Lesson: release hyper-control and accept help from above.",
+    
+    "18-11-11": "Code 18-11-11 — Body and Spirit. You may struggle with weight or fear accepting your body. You may also reject your esoteric abilities. Lesson: develop knowledge and fill yourself with spiritual wisdom.",
+    
+    "20-3-10": "Code 20-3-10 — Female Line. You face deception from women in your family — mother, sister, grandmother — and often from women around you. Lesson: work through relationships with the feminine.",
+    
+    "13-7-20": "Code 13-7-20 — The Survivor. You are marked by broken bones or accidents in past lives. Lesson: never stand still — always move forward toward your goals."
+};
+
+// 2. Your existing definitions
+    const karmicCodesDefinitions = [
+        '18-6-6','18-9-9','18-11-11','9-9-18','15-5-8','15-20-5',
+        '18-3-12','9-15-6','6-17-11','12-19-7','9-12-3','3-22-19',
+        '21-4-10',  '6-14-8', '3-13-10', '12-17-5','12-16-4','21-10-16','6-8-20','3-7-22','9-3-21',
+        '6-5-17','21-7-13','15-8-11','18-6-15','6-20-14','21-10-7'
+    ];
+    const otherImportantCodesDefinitions = [
+       '5-14-19', '6-5', '9-6-15', 
+        '9-20-11', '10-15-5', '15-21-6', '8-13-5', '17-5-6', '18-5-5', 
+        '18-7-7', '18-8-8', '19-7', '18-10-10', '18-11-11', '20-3-10', '13-7-20'
+    ];
+    
+    const baseMN = reduceToMax22(M+N);
+    const baseNO = reduceToMax22(N+O);
+    const baseOP = reduceToMax22(O+P);
+    const basePQ = reduceToMax22(P+Q);
+    const baseQM = reduceToMax22(Q+M);
+    
+    const combinations = [
+        [A, M1, M], [M, M2, B], [B, N2, N], [N, N1, C], [C, O2, O],
+        [O, O1, D], [D, P2, P], [P, P1, E], [E, Q2, Q], [Q, Q1, A],
+        [A, M, B], [B, N, C], [C, O, D], [D, P, E], [E, Q, A],
+        [A, B, C], [B, C, D], [C, D, E], [D, E, A], [E, A, B],
+        [M, baseMN, N], [N, baseNO, O], [O, baseOP, P], [P, basePQ, Q], [Q, baseQM, M],
+        [P, O, N], [P, O, M], [O, N, M],
+        [A, M1, Q1], [Q1, Q, M], [M, M1, A],
+        [B, M2, N2], [N2, N, M], [M, M2, B],
+        [C, N1, O2], [O2, O, N], [N, N1, C],
+        [D, O1, P2], [P2, P, O], [O, O1, D],
+        [E, P1, Q2], [Q2, Q, P], [P, P1, E]
+    ];
+    
+    const twoCombinations = [
+        [A, B], [B, C], [C, D], [D, E], [E, A],
+        [M, N], [N, O], [O, P], [P, Q], [Q, M],
+        [A, M], [M, B], [B, N], [N, C], [C, O], [O, D], [D, P], [P, E], [E, Q], [Q, A]
+    ];
+    
+    function matchesCode(combo, code){
+        const codeArr = code.split('-').map(Number);
+        if(codeArr.length !== combo.length) return false;
+        if(combo.every((n, i) => n === codeArr[i])) return true;
+        if(combo.slice().reverse().every((n, i) => n === codeArr[i])) return true;
+        return false;
+    }
+    
+    const foundKarmicCodes = [];
+    const foundOtherCodes = [];
+    
+    karmicCodesDefinitions.filter(code => code.split('-').length === 3).forEach(code => {
+        for(let combo of combinations){
+            if(matchesCode(combo, code) && !foundKarmicCodes.includes(code)){
+                foundKarmicCodes.push(code);
+            }
+        }
+    });
+    
+    otherImportantCodesDefinitions.filter(code => code.split('-').length === 3).forEach(code => {
+        for(let combo of combinations){
+            if(matchesCode(combo, code) && !foundOtherCodes.includes(code)){
+                foundOtherCodes.push(code);
+            }
+        }
+    });
+    
+    karmicCodesDefinitions.filter(code => code.split('-').length === 2).forEach(code => {
+        for(let combo of twoCombinations){
+            if(matchesCode(combo, code) && !foundKarmicCodes.includes(code)){
+                foundKarmicCodes.push(code);
+            }
+        }
+    });
+    
+    otherImportantCodesDefinitions.filter(code => code.split('-').length === 2).forEach(code => {
+        for(let combo of twoCombinations){
+            if(matchesCode(combo, code) && !foundOtherCodes.includes(code)){
+                foundOtherCodes.push(code);
+            }
+        }
+    });
+    
+  // Stop if nothing found
+if (foundKarmicCodes.length === 0 && foundOtherCodes.length === 0) return null;
+
+// Build HTML once
+let sectionHTML = '';
+sectionHTML += '<div style="margin:30px 0; padding:25px; background:linear-gradient(135deg, rgba(155,89,182,0.15), rgba(142,68,173,0.15)); border:2px solid #9b59b6; border-radius:15px;">';
+
+// Karmic group
+if (foundKarmicCodes.length > 0) {
+  sectionHTML += '<div style="text-align:center; font-size:22px; font-weight:bold; color:#350c48; margin-bottom:20px; text-transform:uppercase;">⚠️ Karmic Codes</div>';
+  sectionHTML += '<div style="line-height:1.8; color:#350c48; margin-bottom:15px;">These are powerful karmic patterns that require deep work and awareness.</div>';
+
+  foundKarmicCodes.forEach(code => {
+    sectionHTML += '<div style="margin:20px 0; padding:20px; background:rgba(255,255,255,0.7); border-left:5px solid #9b59b6; border-radius:10px;">';
+    sectionHTML += `<div style="font-size:20px; font-weight:bold; color:#350c48; margin-bottom:10px;">Code ${code}</div>`;
+    sectionHTML += `<div style="line-height:1.6; color:#350c48;">${codeDescriptions[code] || "No description available yet."}</div>`;
+    sectionHTML += '</div>';
+  });
+}
+
+// Other important group
+if (foundOtherCodes.length > 0) {
+  sectionHTML += '<div style="text-align:center; font-size:22px; font-weight:bold; color:#350c48; margin:30px 0 20px; text-transform:uppercase;">Other Important Codes</div>';
+
+  foundOtherCodes.forEach(code => {
+    sectionHTML += '<div style="margin:20px 0; padding:20px; background:rgba(255,255,255,0.7); border-left:5px solid #f1c40f; border-radius:10px;">';
+    sectionHTML += `<div style="font-size:20px; font-weight:bold; color:#350c48; margin-bottom:10px;">Code ${code}</div>`;
+    sectionHTML += `<div style="line-height:1.6; color:#350c48;">${codeDescriptions[code] || "No description available yet."}</div>`;
+    sectionHTML += '</div>';
+  });
+}
+
+// Close shared container
+sectionHTML += '</div>';
+
+    return {
+       title: "Karmic Codes",
+description: "Karmic codes reveal deep patterns and lessons carried through lifetimes. These numerical sequences appear in your star when specific energies align, indicating significant karmic themes you are meant to work through in this incarnation. A karmic knot is a combination of three arcanas that describes a particular manifestation or a mistake carried over from a past incarnation into this life. If the lesson contained within the knot is not learned, it can exert a powerful influence on the area of life in which it appears.",
+customHTML: sectionHTML
+};
+
+
+}
 
 function createNewSections(A,B,C,D,E,M,N,O,P,Q,M1,M2,N1,N2,O1,O2,P1,P2,Q1,Q2,CENTER){
     const container=document.getElementById('resultsPage');
@@ -6177,102 +6391,125 @@ Ancestral errors often manifest as repeating situations, challenges, or limitati
 Your task is to identify these inherited mistakes, understand how they influence your relationships, health, finances, and spiritual growth, and then actively correct them. When you succeed, you not only heal your own life but also bring resolution to your ancestors and create a clearer path for those who come after you.`, energies:[M,N,Q,O], descriptions: ancestralDescriptions},
 
     ];
+    // Calculate Karmic Codes
+    const karmicCodesSection = calculateKarmicCodes(A,B,C,D,E,M,N,O,P,Q,M1,M2,N1,N2,O1,O2,P1,P2,Q1,Q2);
+    if(karmicCodesSection) {
+        sections.push(karmicCodesSection);
+    }
 
+    
     sections.forEach(sec=>{
-    const div=document.createElement('div'); 
-    div.className='new-section';
-    
-    // Create collapsible header
-    const headerDiv=document.createElement('div');
-    headerDiv.className='section-header';
-    
-    const h3=document.createElement('h3'); 
-    h3.textContent=sec.title;
-    headerDiv.appendChild(h3);
-    
-    const arrow=document.createElement('span');
-    arrow.className='section-arrow collapsed';
-    arrow.textContent='▼';
-    headerDiv.appendChild(arrow); 
-    
-    div.appendChild(headerDiv);
-    
-    // Create collapsible content
-    const contentDiv=document.createElement('div');
-    contentDiv.className='section-content collapsed';
-    
-    const descDiv=document.createElement('div');
-    descDiv.className='section-desc collapsed';
-    descDiv.textContent=sec.description;
-    contentDiv.appendChild(descDiv);
-    
-    const toggleBtn=document.createElement('button');
-    toggleBtn.className='toggle-desc-btn';
-    toggleBtn.innerHTML='Read More <span class="arrow down">▼</span>';
-    toggleBtn.onclick=function(){
-        if(descDiv.classList.contains('collapsed')){
-            descDiv.classList.remove('collapsed');
-            toggleBtn.innerHTML='Read Less <span class="arrow up">▼</span>';
-        } else {
-            descDiv.classList.add('collapsed');
-            toggleBtn.innerHTML='Read More <span class="arrow down">▼</span>';
-        }
-    };
-    contentDiv.appendChild(toggleBtn);
-    
-    
-    
-    // Add energies
-    const counts={};
-    sec.energies.forEach(e=>{counts[e]=(counts[e]||0)+1;});
-    const uniqueEnergies=[...new Set(sec.energies)];
-    
-    uniqueEnergies.forEach(e=>{
-        const multiplier = counts[e] > 1 ? ` <span style="color:#350c48; font-weight:bold; font-size:18px;">x${counts[e]}</span>` : '';
-        let description = sec.descriptions[e] || '';
-        description = description.replace(/<div style="text-align:center;[^>]*>Energy \d+<\/div>/i, '');
+        const div=document.createElement('div'); 
+        div.className='new-section';
         
-        const p=document.createElement('p');
-        p.innerHTML=`<div style="margin-top:20px; text-align:center; font-size:20px; color:#350c48; font-weight:bold; font-style:italic;">Energy ${e}${multiplier}</div>${description}`;
-        contentDiv.appendChild(p);
+        const headerDiv=document.createElement('div');
+        headerDiv.className='section-header';
+        
+        const h3=document.createElement('h3'); 
+        h3.textContent=sec.title;
+        headerDiv.appendChild(h3);
+        
+        const arrow=document.createElement('span');
+        arrow.className='section-arrow collapsed';
+        arrow.textContent='▼';
+        headerDiv.appendChild(arrow); 
+        
+        div.appendChild(headerDiv);
+        
+        const contentDiv=document.createElement('div');
+        contentDiv.className='section-content collapsed';
+        
+        if(sec.customHTML){
+            const descDiv=document.createElement('div');
+            descDiv.className='section-desc collapsed';
+            descDiv.textContent=sec.description;
+            contentDiv.appendChild(descDiv);
+            
+            const toggleBtn=document.createElement('button');
+            toggleBtn.className='toggle-desc-btn';
+            toggleBtn.innerHTML='Read More <span class="arrow down">▼</span>';
+            toggleBtn.onclick=function(){
+                if(descDiv.classList.contains('collapsed')){
+                    descDiv.classList.remove('collapsed');
+                    toggleBtn.innerHTML='Read Less <span class="arrow up">▼</span>';
+                } else {
+                    descDiv.classList.add('collapsed');
+                    toggleBtn.innerHTML='Read More <span class="arrow down">▼</span>';
+                }
+            };
+            contentDiv.appendChild(toggleBtn);
+            
+            const customDiv=document.createElement('div');
+            customDiv.innerHTML=sec.customHTML;
+            contentDiv.appendChild(customDiv);
+            
+        } else {
+            const descDiv=document.createElement('div');
+            descDiv.className='section-desc collapsed';
+            descDiv.textContent=sec.description;
+            contentDiv.appendChild(descDiv);
+            
+            const toggleBtn=document.createElement('button');
+            toggleBtn.className='toggle-desc-btn';
+            toggleBtn.innerHTML='Read More <span class="arrow down">▼</span>';
+            toggleBtn.onclick=function(){
+                if(descDiv.classList.contains('collapsed')){
+                    descDiv.classList.remove('collapsed');
+                    toggleBtn.innerHTML='Read Less <span class="arrow up">▼</span>';
+                } else {
+                    descDiv.classList.add('collapsed');
+                    toggleBtn.innerHTML='Read More <span class="arrow down">▼</span>';
+                }
+            };
+            contentDiv.appendChild(toggleBtn);
+            
+            const counts={};
+            sec.energies.forEach(e=>{counts[e]=(counts[e]||0)+1;});
+            const uniqueEnergies=[...new Set(sec.energies)];
+            
+            uniqueEnergies.forEach(e=>{
+                const multiplier = counts[e] > 1 ? ` <span style="color:#350c48; font-weight:bold; font-size:18px;">x${counts[e]}</span>` : '';
+                let description = sec.descriptions[e] || '';
+                description = description.replace(/<div style="text-align:center;[^>]*>Energy \d+<\/div>/i, '');
+                
+                const p=document.createElement('p');
+                p.innerHTML=`<div style="margin-top:20px; text-align:center; font-size:20px; color:#350c48; font-weight:bold; font-style:italic;">Energy ${e}${multiplier}</div>${description}`;
+                contentDiv.appendChild(p);
+            });
+            
+            if(sec.showTalentButton === true){
+                const talentBtn=document.createElement('button');
+                talentBtn.className='talent-btn';
+                talentBtn.textContent=' Reveal My Strongest Talents';
+                talentBtn.onclick=function(){
+                    showTalents(sec.energies);
+                };
+                contentDiv.appendChild(talentBtn);
+            }
+            
+            if(sec.title === "Spirituality"){
+                const karmicBtn=document.createElement('button');
+                karmicBtn.className='talent-btn';
+                karmicBtn.textContent='Reveal Your Month Karmic Task';
+                karmicBtn.onclick=function(){
+                    showKarmicTask(sec.energies[0]);
+                };
+                contentDiv.appendChild(karmicBtn);
+            }
+        }
+        
+        div.appendChild(contentDiv);
+        
+        headerDiv.onclick=function(){
+            contentDiv.classList.toggle('collapsed');
+            arrow.classList.toggle('collapsed');
+        };
+        
+        container.appendChild(div);
     });
     
-    // Add talent button for Personality section AT THE END
-    if(sec.showTalentButton === true){
-        const talentBtn=document.createElement('button');
-        talentBtn.className='talent-btn';
-        talentBtn.textContent=' Reveal My Strongest Talents';
-        talentBtn.onclick=function(){
-            showTalents(sec.energies);
-        };
-        contentDiv.appendChild(talentBtn);
-    }
-    
-    div.appendChild(contentDiv);
     
     
-    // Add karmic task button for Spirituality section
-    if(sec.title === "Spirituality"){
-        const karmicBtn=document.createElement('button');
-        karmicBtn.className='talent-btn';
-        karmicBtn.textContent='Reveal Your Month Karmic Task';
-        karmicBtn.onclick=function(){
-            showKarmicTask(sec.energies[0]); // B is the month energy
-        };
-        contentDiv.appendChild(karmicBtn);
-    }
-    
-    div.appendChild(contentDiv);
-    
-    
-    // Toggle section on header click
-    headerDiv.onclick=function(){
-        contentDiv.classList.toggle('collapsed');
-        arrow.classList.toggle('collapsed');
-    };
-    
-    container.appendChild(div);
-});
   
   // Add footer to results page
 const footerDiv = document.createElement('div');
