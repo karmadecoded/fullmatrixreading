@@ -5862,6 +5862,53 @@ Someone in the lineage may have experienced imprisonment or restriction of freed
 
 };
 
+// KARMA: PAST INCARNATIONS - 22 energy descriptions
+const karmaDescriptions = {
+  1: "Here will go the karma description for energy 1",
+
+  2: "You did not learn to love women, and you carried resentment toward them — toward your mother, your grandmother, and your sisters. If you have the energy of 2, you need to learn to forgive women, accept them, and avoid breaking relationships with them. In this life, these women may include your mother, your grandmother, your close female friends, and the women around you. The skill of forgiveness must begin within your family. This interpretation applies equally to both men and women.",
+
+  3: "In a past life, you did not become a mother or you did not value your own mother. You may have rejected the idea of having children, avoided motherhood, or struggled to love children. Conflicts with your mother or your own children may have occurred. In this life, your task is to love and appreciate your mother, support her, and open your heart to children. You must not reject them. Healing begins with forgiving your family.",
+
+  4: "You either did not become a father, were an absent or irresponsible father, or did not value your own father. Childhood wounds shaped your adult behavior and created karmic lessons. In this life, you must learn to love your father unconditionally. If he is alive, communication is essential. If he is not, healing can still happen through letters or symbolic practices. You are meant to become a strong provider: support your family financially, become a good father, or — if you are a woman — a good mother.",
+
+  5: "You lacked growth, learning, and intellectual development in a past life. You were rigid, overly traditional, and resistant to new ideas. You may have refused to share knowledge with others. In this life, you must break rigid thinking, learn continuously, expand your worldview, and pass your knowledge on to others. This energy is processed through your mother’s lineage — you are correcting part of her karmic patterns.",
+
+  6: "You did not experience true love — especially self-love. You may have failed to build a happy relationship or destroyed your family. This karma is healed through your father’s lessons and your relationship with him. In this life, you must learn to love yourself, accept your body and soul, and build relationships instead of running from them. You cannot abandon relationships out of fear. You must learn to love, accept, and give.",
+
+  7: "You experienced stagnation in a past life — no movement, no growth, no care for your body or health. Laziness, apathy, and indifference dominated your life. In this life, you must move, travel, change your environment, and avoid routine. Choose work that allows freedom and expansion. Avoid harmful habits, unhealthy eating, and physical neglect. Be careful with extreme activities and avoid reckless behavior — especially involving vehicles or alcohol.",
+
+  8: "You betrayed others, created conflicts, or deceived people in a past life. In this life, you must avoid repeating these patterns. Do not obsess over fairness — life will return everything instantly with this energy. Your task is to act with integrity and avoid revenge, resentment, or fixation on justice.",
+
+  9: "You closed yourself off from spirituality in a past life. You rejected God, higher powers, or followed false teachings. You may have misled others spiritually or practiced dark esoterics. In this life, you must open yourself to spiritual growth, expand your social circle, and avoid isolation. Your salvation lies in discovering your spiritual gifts and using them to help others.",
+
+  10: "You lacked trust in God, the Universe, and higher guidance. You lived in hyper-control and fear, unable to take a step forward. In this life, you must learn to trust the flow of life. When you surrender control, the Wheel of Fortune turns in your favor and brings luck and support.",
+
+  11: "You carried aggression, pride, and a sense of superiority. You refused to help others and believed you were above them. In this life, you must learn humility, compassion, and service. Your task is to uplift others, not dominate them.",
+
+  12: "You lived in depression and self-sacrifice. You gave up your life for others — for a partner, children, or family — losing yourself completely. In this life, you must stop sacrificing yourself. Help others spiritually and intellectually, but do not give up your own life or identity.",
+
+  13: "You destroyed your life through risky behavior: addictions, alcohol, drugs, self-harm, irresponsibility, or apathy. In this life, you will face lessons in love, health, and money depending on where this energy appears. Your task is to build, not destroy — your relationships, your health, your career, your life.",
+
+  14: "You were scattered, greedy, and lacked moderation. You started many things but finished none. In this life, you must learn structure, discipline, and long-term planning. Share your resources and knowledge generously — do not cling to them.",
+
+  15: "You fell into temptations: addictions, affairs, love triangles, forbidden partners, or unethical behavior. This is the energy of spiritual emptiness. Depending on the triangle (love, health, money), the temptation may appear in different forms. In this life, you must avoid addictions, temptations, and destructive relationships. Your salvation is spiritual growth and connection to higher values.",
+
+  16: "You destroyed your own life or the lives of others through greed, impulsiveness, or irresponsibility. You were attached to money and material things. In this life, you must give generously, avoid greed, and build instead of destroy. If something collapses, you must rebuild from zero — with humility and wisdom.",
+
+  17: "You feared success, fame, and your own talents. You may have stolen someone’s ideas or betrayed your own gifts. In this life, you must never steal — even small things. Your task is to believe in your potential, create original work, and express your talents boldly.",
+
+  18: "You lived in fear — fear of God, fear of choices, fear of life. You may have followed false teachings or extreme religious ideas. In this life, you must open your heart to true spirituality and face your fears. This energy gives you powerful intuitive and esoteric gifts — but only when used for good.",
+
+  19: "You harmed others through harshness, criticism, or emotional cruelty. You may have suppressed your children or people around you, forcing them to follow your path. In this life, you must not pressure others or make decisions for them. Your task is to support, uplift, and inspire — not burn everything around you.",
+
+  20: "You carried deep resentment toward your family, your lineage, or God. In this life, you must learn forgiveness. Unhealed resentment leads to illness and emotional suffering. Love must be born within you first — then the world will reflect it back.",
+
+  21: "You lived with limiting beliefs, lack of freedom, and dependence on women — especially your mother. You may have judged others or divided people into categories. In this life, you must break free from dependence, expand your worldview, and stop judging others. All people are equal — this is your key lesson.",
+
+  22: "You were like an eternal child — irresponsible, unserious, lacking discipline and inner strength. You avoided responsibility and did not build anything meaningful. In this life, you must grow up, take responsibility, and build a stable foundation — even literally, like creating your own home. Spiritually, this energy gives you the potential to become a guide or teacher once you develop inner strength and connection to higher forces."
+};
+
 
 function reduceToMax22(num){
     while(num>22) num=num.toString().split('').reduce((s,d)=>s+parseInt(d),0);
@@ -6384,6 +6431,19 @@ This error often manifests as repeating challenges, destructive patterns, or sit
 
 The fatal error is not meant to condemn you — it is a guidepost. It shows where your greatest weakness lies, but also where your greatest potential for transformation exists. Working through it is the key to unlocking freedom from past cycles and stepping fully into your true life purpose.`, energies:[P], descriptions: pastLifeDescriptions},
 
+{
+    title:"Karma: Past Incarnations", 
+    description:`These energies represent your past life karmic errors and lessons. Knowing them helps you avoid repeating the same mistakes in this lifetime. Each energy reveals a specific pattern or behavior from a previous incarnation that blocked your growth. By recognizing these karmic patterns, you can consciously choose a different path and transform these challenges into wisdom. These are not punishments, but opportunities for your soul to evolve and break free from cycles that no longer serve you.`, 
+    energies:[
+        reduceToMax22(Q+M), 
+        reduceToMax22(P+Q), 
+        reduceToMax22(O+P), 
+        reduceToMax22(N+O), 
+        reduceToMax22(M+N)
+    ], 
+    descriptions: karmaDescriptions
+},
+
         {title:"Ancestral Programs", description:`This section reveals the ancestral mistakes that you carry responsibility for in this lifetime. These are unresolved programs passed down through your family line — patterns of behavior, choices, or imbalances that were not corrected by previous generations. They become part of your path so that you can recognize them, work through them, and transform them into strength.
 
 Ancestral errors often manifest as repeating situations, challenges, or limitations that seem to follow you regardless of your own efforts. They are not punishments, but lessons entrusted to you by your lineage. By facing them consciously, you free yourself and your family line from cycles that have persisted across generations.
@@ -6532,7 +6592,7 @@ setTimeout(function(){
     });
 }, 100);
 
-}  // ← THIS LINE WAS MISSING! Closes createNewSections
+}  
 
 </script> 
 <script>
